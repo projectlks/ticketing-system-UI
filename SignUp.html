@@ -4,7 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign Up Form</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
     <script
       defer
       src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
@@ -180,9 +183,39 @@
 
         <!-- Right Section -->
         <div
-          class="hidden lg:flex items-center justify-center w-1/2 bg-gray-100 p-10"
+          class="hidden relative lg:flex items-center justify-center w-1/2 bg-[#161950] p-10"
         >
-          <h2 class="text-2xl font-bold text-gray-800">Welcome Back!</h2>
+          <div
+            class="absolute right-0 top-0 z-0 w-full max-w-[250px] xl:max-w-[450px]"
+          >
+            <img src="imgs/grid-01.svg" alt="grid" />
+          </div>
+
+          <div
+            class="absolute bottom-0 left-0 z-0 w-full max-w-[250px] rotate-180 xl:max-w-[450px]"
+          >
+            <img src="imgs/grid-01.svg" alt="grid" />
+          </div>
+
+          <!-- <h2 class="text-2xl font-bold text-gray-800 relative z-10">Welcome Back!</h2> -->
+
+          <div class="flex flex-col items-center w-[80%]">
+            <a href="index.html" class="block mb-6">
+              <img src="imgs/logo.png" alt="Logo" class="h-24 w-24" />
+            </a>
+
+            <h3 class="font-[600] text-4xl text-center text-white mb-4">
+              East Wind Myanmar Company Limited
+            </h3>
+
+            <p
+              class="text-center text-gray-400 font-semibold dark:text-white/60"
+            >
+              To be Premier and Preferred Technology Solutions Provider in ICT
+              industry. We create technologies for more efficient business and
+              more comfortable life.
+            </p>
+          </div>
         </div>
       </div>
     </div>

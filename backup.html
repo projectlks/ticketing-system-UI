@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="grid grid-cols-1 gap-5">
+      <div>
+        <label
+          class="mb-1.5 block text-sm font-medium text-gray-700"
+          for="department"
+        >
+          Department
+        </label>
+        <input
+          disabled
+          type="text"
+          id="department"
+          name="department"
+          placeholder="156ere5648err"
+          class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-300"
+        />
+      </div>
+
+      <div>
+        <label
+          class="mb-1.5 block text-sm font-medium text-gray-700"
+          for="status"
+        >
+          Status
+        </label>
+        <input
+          type="text"
+          id="status"
+          name="status"
+          placeholder="New Tickets"
+          class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-300"
+        />
+      </div>
+    </div>
+
+
+    <!--  -->
+
+      <!-- Radio Buttons for Priority -->
+          <!-- <div x-data="{ isChecked: '' }">
+            <div class="flex items-center gap-3">
+              <label class="text-sm font-medium text-gray-800"
+                >Priority :</label
+              >
+              <div class="flex flex-wrap items-center gap-4">
+                Low
+                <div>
+                  <label
+                    :class="isChecked === 'Low' ? 'text-gray-700' : 'text-gray-500'"
+                    class="relative flex items-center gap-3 text-sm font-medium cursor-pointer select-none"
+                  >
+                    <input
+                      class="sr-only"
+                      type="radio"
+                      name="priority-radio"
+                      value="Low"
+                      @change="isChecked = 'Low'"
+                    />
+                    <span
+                      :class="isChecked === 'Low' ? 'border-blue-500 bg-blue-500' : 'bg-transparent border-gray-300'"
+                      class="flex h-5 w-5 items-center justify-center rounded-full border-[1.25px]"
+                    >
+                      <span
+                        :class="isChecked === 'Low' ? 'block' : 'hidden'"
+                        class="w-2 h-2 bg-white rounded-full"
+                      ></span>
+                    </span>
+                    Low
+                  </label>
+                </div>
+
+                Medium
+                <div>
+                  <label
+                    :class="isChecked === 'Medium' ? 'text-gray-700' : 'text-gray-500'"
+                    class="relative flex items-center gap-3 text-sm font-medium cursor-pointer select-none"
+                  >
+                    <input
+                      class="sr-only"
+                      type="radio"
+                      name="priority-radio"
+                      value="Medium"
+                      @change="isChecked = 'Medium'"
+                    />
+                    <span
+                      :class="isChecked === 'Medium' ? 'border-blue-500 bg-blue-500' : 'bg-transparent border-gray-300'"
+                      class="flex h-5 w-5 items-center justify-center rounded-full border-[1.25px]"
+                    >
+                      <span
+                        :class="isChecked === 'Medium' ? 'block' : 'hidden'"
+                        class="w-2 h-2 bg-white rounded-full"
+                      ></span>
+                    </span>
+                    Medium
+                  </label>
+                </div>
+
+                High
+                <div>
+                  <label
+                    :class="isChecked === 'High' ? 'text-gray-700' : 'text-gray-500'"
+                    class="relative flex items-center gap-3 text-sm font-medium cursor-pointer select-none"
+                  >
+                    <input
+                      class="sr-only"
+                      type="radio"
+                      name="priority-radio"
+                      value="High"
+                      @change="isChecked = 'High'"
+                    />
+                    <span
+                      :class="isChecked === 'High' ? 'border-blue-500 bg-blue-500' : 'bg-transparent border-gray-300'"
+                      class="flex h-5 w-5 items-center justify-center rounded-full border-[1.25px]"
+                    >
+                      <span
+                        :class="isChecked === 'High' ? 'block' : 'hidden'"
+                        class="w-2 h-2 bg-white rounded-full"
+                      ></span>
+                    </span>
+                    High
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div> -->
+
+          <!-- Department and status -->
+
+       <!--  -->
+
+         <!-- Channel -->
+
+         <div>
+            <label class="mb-1.5 block text-sm font-medium text-gray-700">
+              Channel
+            </label>
+            <div
+              x-data="{ isOptionSelected: false }"
+              class="relative z-20 bg-transparent"
+            >
+              <select
+                class="z-20 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-blue-400 focus:outline-hidden focus:ring-3 focus:ring-blue-300"
+                :class="isOptionSelected &amp;&amp; 'text-gray-500 '"
+                @change="isOptionSelected = true"
+              >
+                <option value="" class="text-gray-500">Option 1</option>
+                <option value="" class="text-gray-500">Option 2</option>
+                <option value="" class="text-gray-500">Option 3</option>
+                <option value="" class="text-gray-500">Option 4</option>
+              </select>
+              <span
+                class="absolute z-30 text-gray-500 -translate-y-1/2 right-4 top-1/2"
+              >
+                <svg
+                  class="stroke-current"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396"
+                    stroke=""
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></path>
+                </svg>
+              </span>
+            </div>
+          </div>
+<!--  -->
+
+
+      <!-- Tickets ID  -->
+      <div>
+        <label
+          class="mb-1.5 block text-sm font-medium text-gray-700"
+          for="email"
+        >
+          Tickets ID
+        </label>
+        <input
+          disabled
+          type="email"
+          id="email"
+          name="email"
+          placeholder="156ere5648err"
+          class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-300"
+        />
+      </div>
+
+
+      <script>
+        const MAX_IMAGES = 3;
+        const MAX_SIZE_MB = 1;
+        let uploadedImages = [];
+
+        function handleFileChange(event) {
+          const file = event.target.files[0];
+          const imgContainer = document.getElementById("img");
+          const textContainer = document.getElementById("text");
+
+          if (!file) return;
+
+          // File type validation
+          if (!file.type.startsWith("image/")) {
+            Swal.fire({
+              icon: "error",
+              title: "Invalid File",
+              text: "Please upload image files only.",
+              confirmButtonColor: "#3B82F6",
+            });
+            return;
+          }
+
+          // File size validation
+          if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+            Swal.fire({
+              icon: "error",
+              title: "File Too Large",
+              text: "Image must be smaller than 1MB.",
+              confirmButtonColor: "#3B82F6",
+            });
+            return;
+          }
+
+          // Max image count validation
+          if (uploadedImages.length >= MAX_IMAGES) {
+            Swal.fire({
+              icon: "warning",
+              title: "Upload Limit Reached",
+              text: "You can only upload up to 3 images.",
+              confirmButtonColor: "#3B82F6",
+            });
+            return;
+          }
+
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            const imgWrapper = document.createElement("span");
+            imgWrapper.className =
+              "w-full h-auto aspect-square block p-2 rounded-xl overflow-hidden";
+
+            const image = document.createElement("img");
+            image.src = e.target.result;
+            image.alt = "Preview";
+            image.className = "h-full w-full object-contain mx-auto";
+
+            imgWrapper.appendChild(image);
+            imgContainer.appendChild(imgWrapper);
+            uploadedImages.push(file);
+
+            // Show image container and hide text
+            imgContainer.classList.remove("hidden");
+            textContainer.classList.add("hidden");
+          };
+
+          reader.readAsDataURL(file);
+
+          // Clear input to allow re-upload of same file
+          event.target.value = "";
+        }
+      </script>
+  </body>
+</html>
