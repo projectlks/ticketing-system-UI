@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Include Alpine.js -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+      defer
+    ></script>
+
+    <!-- for alert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        @keyframes zoomIn {
+          0% {
+            transform: scale(0);
+            opacity: 0;
+          }
+          20% {
+            transform: scale(0.8);
+            opacity: 0.6;
+          }
+          40% {
+            transform: scale(1.1);
+            opacity: 0.9;
+          }
+          60% {
+            transform: scale(1.2);
+            opacity: 1;
+          }
+          80% {
+            transform: scale(1.1);
+            opacity: 1;
+          }
+          100% {
+            transform: scale(1);
+            opacity: 1;
+          }
+        }
+  
+        @keyframes appear {
+          0% {
+            opacity: 0;
+          }
+  
+          100% {
+            opacity: 0.3;
+          }
+        }
+  
+        .zoom-in {
+          animation: zoomIn 0.2s ease-out forwards;
+        }
+        .appear {
+          animation: appear 0.4s ease-out forwards;
+        }
+      </style>
+  </head>
+  <body>
+    <section
+      id="ticketsForm"
+      class=" w-screen fixed top-0 left-0 flex justify-center min-h-screem overflow-auto h-screen items-center backdrop-blur-lg"
+    >
+      <div
+        id="toClose"
+        class="w-full h-full fixed top-0 left-0 bg-black appear"
+      ></div>
+
+      <form
+        action=""
+        class="w-[90%] zoom-in md:w-[600px] h-fit flex flex-col rounded-2xl border-gray-200 border bg-white"
+        onclick=""
+      >
+        <div class="px-5 py-4 sm:px-6 sm:py-5">
+          <div>
+            <span></span>
+            <h1 class="text-2xl text-gray-800 font-bold mb-3 mt-5">
+              Add a new ticket
+            </h1>
+            <p class="text-gray-500 text-sm font-semibold">
+              Effortlessly manage your ticket: add a new ticket
+            </p>
+          </div>
+        </div>
+
+        <section class="p-5 space-y-6 border-t border-gray-100 sm:p-6">
+          <!-- Title  -->
+          <div>
+            <label
+              class="mb-1.5 block text-sm font-medium text-gray-700"
+              for="title"
+            >
+              Title
+            </label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              placeholder="Tickets title"
+              class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-300/50"
+            />
+          </div>
+
+          <!-- Description  -->
+
+          <div>
+            <label
+              class="mb-1.5 block text-sm font-medium text-gray-700"
+              for="description"
+            >
+              Description
+            </label>
+
+            <textarea
+              placeholder="Enter your message"
+              rows="6"
+              class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-blue-400 focus:outline-hidden focus:ring-1 focus:ring-blue-300/50"
+            ></textarea>
+          </div>
+
+          <!-- selected Box -->
+
+          <!-- Category  -->
+
+          <div>
+            <label class="mb-1.5 block text-sm font-medium text-gray-700">
+              Category
+            </label>
+            <div
+              x-data="{ isOptionSelected: false }"
+              class="relative z-20 bg-transparent"
+            >
+              <select
+                class="z-20 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-blue-400 focus:outline-hidden focus:ring-1 focus:ring-blue-300/50"
+                :class="isOptionSelected &amp;&amp; 'text-gray-500 '"
+                @change="isOptionSelected = true"
+              >
+                <option value="" class="text-gray-500">Option 1</option>
+                <option value="" class="text-gray-500">Option 2</option>
+                <option value="" class="text-gray-500">Option 3</option>
+                <option value="" class="text-gray-500">Option 4</option>
+              </select>
+              <span
+                class="absolute z-30 text-gray-500 -translate-y-1/2 right-4 top-1/2"
+              >
+                <svg
+                  class="stroke-current"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396"
+                    stroke=""
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></path>
+                </svg>
+              </span>
+            </div>
+          </div>
+
+          <!-- Attachment -->
+
+          <div
+            class="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-5 lg:p-10 w-full block hover:border-indigo-600 cursor-pointer text-center"
+            onclick="document.getElementById('fileInput').click()"
+          >
+            <!-- Hidden File Input -->
+            <input
+              type="file"
+              accept="image/png, image/jpeg, image/webp"
+              id="fileInput"
+              class="hidden"
+              onchange="handleFileChange(event)"
+            />
+
+            <div id="text">
+              <div class="mb-[22px] flex justify-center">
+                <div
+                  class="flex h-[68px] w-[68px] items-center justify-center rounded-full bg-gray-200 text-gray-700"
+                >
+                  <!-- Upload Icon -->
+                  <svg
+                    class="fill-current"
+                    width="29"
+                    height="28"
+                    viewBox="0 0 29 28"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M14.5019 3.91699C14.2852 3.91699 14.0899 4.00891 13.953 4.15589L8.57363 9.53186C8.28065 9.82466 8.2805 10.2995 8.5733 10.5925C8.8661 10.8855 9.34097 10.8857 9.63396 10.5929L13.7519 6.47752V18.667C13.7519 19.0812 14.0877 19.417 14.5019 19.417C14.9161 19.417 15.2519 19.0812 15.2519 18.667V6.48234L19.3653 10.5929C19.6583 10.8857 20.1332 10.8855 20.426 10.5925C20.7188 10.2995 20.7186 9.82463 20.4256 9.53184L15.0838 4.19378C14.9463 4.02488 14.7367 3.91699 14.5019 3.91699ZM5.91626 18.667C5.91626 18.2528 5.58047 17.917 5.16626 17.917C4.75205 17.917 4.41626 18.2528 4.41626 18.667V21.8337C4.41626 23.0763 5.42362 24.0837 6.66626 24.0837H22.3339C23.5766 24.0837 24.5839 23.0763 24.5839 21.8337V18.667C24.5839 18.2528 24.2482 17.917 23.8339 17.917C23.4197 17.917 23.0839 18.2528 23.0839 18.667V21.8337C23.0839 22.2479 22.7482 22.5837 22.3339 22.5837H6.66626C6.25205 22.5837 5.91626 22.2479 5.91626 21.8337V18.667Z"
+                      fill=""
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+
+              <span
+                class="mx-auto mb-5 block w-full max-w-[290px] text-xs text-gray-700"
+              >
+                <!-- Drag and drop your PNG, JPG, WebP, SVG images here or browse -->
+                You can upload up to <strong>3 images</strong>. Each image must
+                be under <strong>1MB</strong>. Supported formats:
+                <strong>PNG, JPG, JPEG</strong>.
+              </span>
+
+              <span class="text-sm text-indigo-500 font-medium underline">
+                Browse File
+              </span>
+            </div>
+
+            <div
+              id="img"
+              class="hidden grid grid-cols-2 md:grid-cols-3 gap-3 w-full bg-gray-300 p-3 rounded-xl"
+            >
+              <!-- Images will be appended here -->
+            </div>
+          </div>
+
+          <!-- button -->
+          <div class="mt-6 flex justify-end space-x-3 items-center">
+            <button
+              onclick="document.getElementById('ticketsForm').style = 'none' "
+              id="cancel"
+              class="flex cursor-pointer items-center justify-center px-4 py-3 text-sm font-medium border-gray-300 transition rounded-lg border text-gray-800 hover:bg-gray-100 h-[44px]"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="flex cursor-pointer items-center justify-center px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-indigo-500 hover:bg-indigo-600 shadow-md h-[44px]"
+            >
+              Create Ticket
+            </button>
+          </div>
+        </section>
+      </form>
+    </section>
+  </body>
+</html>
