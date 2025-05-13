@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Customer Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Include Alpine.js -->
@@ -61,491 +61,811 @@
       }
     </style>
   </head>
-  <body class="bg-gray-100">
-    <!-- top bar -->
-
-    <div class="w-full bg-white h-[76px] border-b border-gray-300">
-      <div class="flex justify-between h-full items-center px-6">
-        <div class="flex items-center space-x-3 p-3 h-full">
-          <img src="imgs/logo.png" alt="logo" class="h-full w-auto" />
-          <h1 class="text-2xl font-bold">HELPDESK</h1>
-        </div>
-        <div
-          class="relative"
-          x-data="{ dropdownOpen: false }"
-          @click.outside="dropdownOpen = false"
+  <body class="bg-gray-100"  x-data="{ viewTicket: false }" >
+    <section
+      class="w-full overflow-x-hidden relative h-screen flex"
+      x-data="{ openSidebar: true }"
+    >
+      <!-- Sidebar -->
+      <div x-show="openSidebar" x-transition class=" h-full min-h-screen w-[300px] " >
+        <aside
+          @click.away="if (window.innerWidth < 768) openSidebar = false"
+          :class="openSidebar ? ' left-0 ' :  '-left-full' "
+          class="w-[300px] h-full fixed px-5 pt-5 transition fixed top-0 shadow-md fixed bg-white inset-0  z-50 md:block"
         >
+          <!-- Logo -->
+          <div class="flex items-center space-x-3 mb-10">
+            <img src="imgs/logo.png" alt="logo" class="w-8 h-8" />
+            <h1 class="text-2xl font-bold text-gray-800">East Wind</h1>
+          </div>
+
+          <!-- Navigation -->
+          <nav class="space-y-2" x-data="{activeItem : 'dashboard'} ">
+ 
+
+            <!-- dashboard -->
+            <div
+              @click="activeItem = 'dashboard'"
+              :class="{
+          'bg-[#ecf3ff] text-blue-600': activeItem === 'dashboard',
+          'text-gray-700 hover:text-blue-600': activeItem !== 'dashboard'
+        }"
+              class="group h-[40px] flex items-center space-x-3 cursor-pointer py-2 px-3 rounded-lg hover:bg-[#ecf3ff] transition-colors duration-200"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"
+                />
+              </svg>
+
+              <span class="text-sm font-medium">Dashboard</span>
+            </div>
+
+            <!-- tickets -->
+
+            <div
+              @click="activeItem = 'tickets'"
+              :class="{
+            'bg-[#ecf3ff] text-blue-600': activeItem === 'tickets',
+            'text-gray-700 hover:text-blue-600': activeItem !== 'tickets'
+          }"
+              class="group h-[40px] flex items-center space-x-3 cursor-pointer py-2 px-3 rounded-lg hover:bg-[#ecf3ff] transition-colors duration-200"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M6.429 9.75 2.25 12l4.179 2.25m0-4.5 5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0 4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0-5.571 3-5.571-3"
+                />
+              </svg>
+              <span class="text-sm font-medium">Tickets</span>
+            </div>
+
+        
+  
+        
+
+           
+         
+          
+            <!-- Tables with Dropdown -->
+            <div x-data="{ selected: '' }" class="space-y-1">
+              <!-- Header -->
+
+              <div
+                @click="activeItem = 'settings'"
+                :class="{
+          'bg-[#ecf3ff] text-blue-600': activeItem === 'settings',
+          'text-gray-700 hover:text-blue-600': activeItem !== 'settings '
+        }"
+                class="group h-[40px] flex items-center space-x-3 justify-between cursor-pointer py-2 px-3 rounded-lg hover:bg-[#ecf3ff] transition-colors duration-200"
+                @click.prevent="selected = (selected === 'Tables' ? '' : 'Tables')"
+              >
+                <div class="flex items-center space-x-3">
+                  <!-- Icon -->
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                    />
+                  </svg>
+                  <span class="text-sm font-medium">Setting</span>
+                </div>
+
+                <!-- Arrow -->
+                <svg
+                  class="size-4 transition-transform duration-200"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 20 20"
+                  stroke="currentColor"
+                >
+                  <path
+                    d="M6 8l4 4 4-4"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+
+              <!-- Dropdown Menu -->
+              <div
+                x-show="selected === 'Tables'"
+                x-transition
+                class="translate transform overflow-hidden block"
+                :class="(selected === 'Tables') ? 'block' :'hidden'"
+              >
+                <ul class="mt-2 flex flex-col gap-1 pl-9">
+                  <li class="">
+                    <a
+                      href="#"
+                      class="block text-sm py-2.5 px-3 rounded hover:text-blue-600 hover:bg-[#ecf3ff] transition"
+                    >
+                      Basic Tables
+                    </a>
+                  </li>
+
+                  <li>
+                    <a
+                      href="#"
+                      class="flex justify-between items-center text-sm py-2.5 px-3 rounded hover:text-blue-600 hover:bg-[#ecf3ff] transition"
+                    >
+                      <span>Data Tables</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        </aside>
+      </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 h-full transition bg-gray-100">
+      <!-- top bar -->
+      <div class="w-full bg-white h-[76px] border">
+        <div class="flex justify-between h-full items-center px-6">
+          <!-- left menu btn -->
           <button
-            class="flex items-center text-gray-700 focus:outline-none"
-            @click="dropdownOpen = !dropdownOpen"
+            @click="openSidebar = !openSidebar"
+            class="z-99999 flex h-10 w-10 items-center justify-center hover:bg-gray-100 rounded-lg border-gray-200 text-gray-500 lg:h-11 lg:w-11 lg:border"
           >
-            <span class="mr-3 h-11 w-11 overflow-hidden relative rounded-full">
-              <img
-                src="imgs/profile.png"
-                class="absolute top-1/2 transform -translate-y-1/2"
-              />
-            </span>
-            <span class="mr-1 block font-medium text-sm">Musharof</span>
             <svg
-              class="stroke-gray-500"
-              width="18"
-              height="20"
-              viewBox="0 0 18 20"
+              class="fill-current lg:block"
+              width="16"
+              height="12"
+              viewBox="0 0 16 12"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M4.3125 8.65625L9 13.3437L13.6875 8.65625"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M0.583252 1C0.583252 0.585788 0.919038 0.25 1.33325 0.25H14.6666C15.0808 0.25 15.4166 0.585786 15.4166 1C15.4166 1.41421 15.0808 1.75 14.6666 1.75L1.33325 1.75C0.919038 1.75 0.583252 1.41422 0.583252 1ZM0.583252 11C0.583252 10.5858 0.919038 10.25 1.33325 10.25L14.6666 10.25C15.0808 10.25 15.4166 10.5858 15.4166 11C15.4166 11.4142 15.0808 11.75 14.6666 11.75L1.33325 11.75C0.919038 11.75 0.583252 11.4142 0.583252 11ZM1.33325 5.25C0.919038 5.25 0.583252 5.58579 0.583252 6C0.583252 6.41421 0.919038 6.75 1.33325 6.75L7.99992 6.75C8.41413 6.75 8.74992 6.41421 8.74992 6C8.74992 5.58579 8.41413 5.25 7.99992 5.25L1.33325 5.25Z"
+                fill=""
               ></path>
             </svg>
           </button>
+          <!-- right  -->
+          <div class="flex space-x-3">
+            <!-- translate button  -->
 
-          <!-- dropdown start -->
-          <div
-            x-show="dropdownOpen"
-            x-transition
-            class="absolute right-0 mt-4 w-[260px] rounded-2xl border border-gray-200 bg-white p-3 shadow-lg z-50"
-          >
-            <div>
-              <span class="block font-medium text-gray-700 text-sm"
-                >Musharof Chowdhury</span
-              >
-              <span class="block text-xs text-gray-500 mt-0.5"
-                >randomuser@pimjo.com</span
-              >
-            </div>
-            <ul class="flex flex-col gap-1 border-b border-gray-200 pb-3 pt-4">
-              <li>
-                <a
-                  href="profile.html"
-                  class="group flex items-center gap-3 rounded-lg px-3 py-2 text-theme-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700"
-                >
-                  <svg
-                    class="fill-gray-500 group-hover:fill-gray-700"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M12 3.5C7.30558 3.5 3.5 7.30558 3.5 12C3.5 14.1526 4.3002 16.1184 5.61936 17.616C6.17279 15.3096 8.24852 13.5955 10.7246 13.5955H13.2746C15.7509 13.5955 17.8268 15.31 18.38 17.6167C19.6996 16.119 20.5 14.153 20.5 12C20.5 7.30558 16.6944 3.5 12 3.5ZM17.0246 18.8566V18.8455C17.0246 16.7744 15.3457 15.0955 13.2746 15.0955H10.7246C8.65354 15.0955 6.97461 16.7744 6.97461 18.8455V18.856C8.38223 19.8895 10.1198 20.5 12 20.5C13.8798 20.5 15.6171 19.8898 17.0246 18.8566ZM2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12ZM11.9991 7.25C10.8847 7.25 9.98126 8.15342 9.98126 9.26784C9.98126 10.3823 10.8847 11.2857 11.9991 11.2857C13.1135 11.2857 14.0169 10.3823 14.0169 9.26784C14.0169 8.15342 13.1135 7.25 11.9991 7.25ZM8.48126 9.26784C8.48126 7.32499 10.0563 5.75 11.9991 5.75C13.9419 5.75 15.5169 7.32499 15.5169 9.26784C15.5169 11.2107 13.9419 12.7857 11.9991 12.7857C10.0563 12.7857 8.48126 11.2107 8.48126 9.26784Z"
-                      fill=""
-                    ></path>
-                  </svg>
-                  Edit profile
-                </a>
-              </li>
-              <li>
-                <a
-                  href="chat.html"
-                  class="group flex items-center gap-3 rounded-lg px-3 py-2 text-theme-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700"
-                >
-                  <svg
-                    class="fill-gray-500 group-hover:fill-gray-700"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M10.4858 3.5L13.5182 3.5C13.9233 3.5 14.2518 3.82851 14.2518 4.23377C14.2518 5.9529 16.1129 7.02795 17.602 6.1682C17.9528 5.96567 18.4014 6.08586 18.6039 6.43667L20.1203 9.0631C20.3229 9.41407 20.2027 9.86286 19.8517 10.0655C18.3625 10.9253 18.3625 13.0747 19.8517 13.9345C20.2026 14.1372 20.3229 14.5859 20.1203 14.9369L18.6039 17.5634C18.4013 17.9142 17.9528 18.0344 17.602 17.8318C16.1129 16.9721 14.2518 18.0471 14.2518 19.7663C14.2518 20.1715 13.9233 20.5 13.5182 20.5H10.4858C10.0804 20.5 9.75182 20.1714 9.75182 19.766C9.75182 18.0461 7.88983 16.9717 6.40067 17.8314C6.04945 18.0342 5.60037 17.9139 5.39767 17.5628L3.88167 14.937C3.67903 14.586 3.79928 14.1372 4.15026 13.9346C5.63949 13.0748 5.63946 10.9253 4.15025 10.0655C3.79926 9.86282 3.67901 9.41401 3.88165 9.06303L5.39764 6.43725C5.60034 6.08617 6.04943 5.96581 6.40065 6.16858C7.88982 7.02836 9.75182 5.9539 9.75182 4.23399C9.75182 3.82862 10.0804 3.5 10.4858 3.5ZM13.5182 2L10.4858 2C9.25201 2 8.25182 3.00019 8.25182 4.23399C8.25182 4.79884 7.64013 5.15215 7.15065 4.86955C6.08213 4.25263 4.71559 4.61859 4.0986 5.68725L2.58261 8.31303C1.96575 9.38146 2.33183 10.7477 3.40025 11.3645C3.88948 11.647 3.88947 12.3531 3.40026 12.6355C2.33184 13.2524 1.96578 14.6186 2.58263 15.687L4.09863 18.3128C4.71562 19.3814 6.08215 19.7474 7.15067 19.1305C7.64015 18.8479 8.25182 19.2012 8.25182 19.766C8.25182 20.9998 9.25201 22 10.4858 22H13.5182C14.7519 22 15.7518 20.9998 15.7518 19.7663C15.7518 19.2015 16.3632 18.8487 16.852 19.1309C17.9202 19.7476 19.2862 19.3816 19.9029 18.3134L21.4193 15.6869C22.0361 14.6185 21.6701 13.2523 20.6017 12.6355C20.1125 12.3531 20.1125 11.647 20.6017 11.3645C21.6701 10.7477 22.0362 9.38152 21.4193 8.3131L19.903 5.68667C19.2862 4.61842 17.9202 4.25241 16.852 4.86917C16.3632 5.15138 15.7518 4.79856 15.7518 4.23377C15.7518 3.00024 14.7519 2 13.5182 2ZM9.6659 11.9999C9.6659 10.7103 10.7113 9.66493 12.0009 9.66493C13.2905 9.66493 14.3359 10.7103 14.3359 11.9999C14.3359 13.2895 13.2905 14.3349 12.0009 14.3349C10.7113 14.3349 9.6659 13.2895 9.6659 11.9999ZM12.0009 8.16493C9.88289 8.16493 8.1659 9.88191 8.1659 11.9999C8.1659 14.1179 9.88289 15.8349 12.0009 15.8349C14.1189 15.8349 15.8359 14.1179 15.8359 11.9999C15.8359 9.88191 14.1189 8.16493 12.0009 8.16493Z"
-                      fill=""
-                    ></path>
-                  </svg>
-                  Account settings
-                </a>
-              </li>
-              <li>
-                <a
-                  href="profile.html"
-                  class="group flex items-center gap-3 rounded-lg px-3 py-2 text-theme-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700"
-                >
-                  <svg
-                    class="fill-gray-500 group-hover:fill-gray-700"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M3.5 12C3.5 7.30558 7.30558 3.5 12 3.5C16.6944 3.5 20.5 7.30558 20.5 12C20.5 16.6944 16.6944 20.5 12 20.5C7.30558 20.5 3.5 16.6944 3.5 12ZM12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM11.0991 7.52507C11.0991 8.02213 11.5021 8.42507 11.9991 8.42507H12.0001C12.4972 8.42507 12.9001 8.02213 12.9001 7.52507C12.9001 7.02802 12.4972 6.62507 12.0001 6.62507H11.9991C11.5021 6.62507 11.0991 7.02802 11.0991 7.52507ZM12.0001 17.3714C11.5859 17.3714 11.2501 17.0356 11.2501 16.6214V10.9449C11.2501 10.5307 11.5859 10.1949 12.0001 10.1949C12.4143 10.1949 12.7501 10.5307 12.7501 10.9449V16.6214C12.7501 17.0356 12.4143 17.3714 12.0001 17.3714Z"
-                      fill=""
-                    ></path>
-                  </svg>
-                  Support
-                </a>
-              </li>
-            </ul>
-            <button
-              class="group mt-3 flex items-center gap-3 w-full justify-center rounded-lg px-3 py-2 text-theme-sm font-medium text-gray-700 hover:bg-red-100 hover:text-red-700"
+            <div
+              class="relative inline-block text-left"
+              x-data="{ languageMenu: { open: false, selected: 'English' } }"
             >
+              <div class="h-full flex items-center">
+                <button
+                  type="button"
+                  @click="languageMenu.open = !languageMenu.open"
+                  class="inline-flex justify-between gap-x-1.5 rounded-md w-[120px] bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50"
+                  id="language-button"
+                  aria-expanded="true"
+                  aria-haspopup="true"
+                >
+                  <span x-text="languageMenu.selected"></span>
+                  <svg
+                    class="-mr-1 size-5 text-gray-400"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
+                    class="transform transition-transform"
+                    :class="languageMenu.open ? 'rotate-180' : 'rotate-0' "
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </button>
+              </div>
+
+              <div
+                x-transition
+                x-show="languageMenu.open"
+                @click.outside="languageMenu.open = false"
+                class="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none"
+                role="menu"
+                aria-orientation="vertical"
+                aria-labelledby="language-button"
+                tabindex="-1"
+              >
+                <!-- Active: "bg-gray-100 text-gray-900 outline-hidden", Not Active: "text-gray-700" -->
+                <div class="p-1 flex flex-col space-y-1" role="none">
+                  <button
+                    :class="{
+                  'bg-[#ecf3ff] text-blue-600': languageMenu.selected === 'English',
+                  'text-gray-700 ': languageMenu.selected !== 'English '
+                }"
+                    @click="languageMenu.selected = 'English'; languageMenu.open = false"
+                    class="block w-full mt-1 px-4 py-2 flex space-x-3 items-center  text-left text-sm text-gray-700 hover:bg-gray-100"
+                    role="menuitem"
+                  >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 32 32" id="Gb-Ukm-United-Kingdom--Streamline-Flagpack" height="24" width="24"><desc>GB UKM United Kingdom Streamline Icon: https://streamlinehq.com</desc><path fill="#2e42a5" fill-rule="evenodd" d="M0 4v24h32V4H0Z" clip-rule="evenodd"></path><mask id="a" width="32" height="24" x="0" y="4" maskUnits="userSpaceOnUse" style="mask-type:luminance"><path fill="#ffffff" fill-rule="evenodd" d="M0 4v24h32V4H0Z" clip-rule="evenodd"></path></mask><g mask="url(#a)"><path fill="#ffffff" d="m-3.563 26.285 7.042 2.978 28.68-22.025 3.715-4.426-7.53-.995-11.698 9.491-9.416 6.395-10.793 8.582Z"></path><path fill="#f50100" d="M-2.599 28.372.99 30.1 34.54 2.401h-5.038L-2.6 28.371Z"></path><path fill="#ffffff" d="m35.563 26.285-7.042 2.978L-.159 7.238l-3.715-4.426 7.53-.995 11.698 9.491 9.416 6.395 10.793 8.582Z"></path><path fill="#f50100" d="m35.323 27.782-3.587 1.729-14.287-11.86-4.236-1.325L-4.231 2.827H.806L18.24 16.006l4.631 1.589 12.452 10.188Z"></path><mask id="b" fill="#ffffff"><path fill-rule="evenodd" d="M19.778 2h-7.556v10H-1.972v8h14.194v10h7.556V20h14.25v-8h-14.25V2Z" clip-rule="evenodd"></path></mask><path fill="#f50100" fill-rule="evenodd" d="M19.778 2h-7.556v10H-1.972v8h14.194v10h7.556V20h14.25v-8h-14.25V2Z" clip-rule="evenodd"></path><path fill="#ffffff" d="M12.222 2V0h-2v2h2Zm7.556 0h2V0h-2v2Zm-7.556 10v2h2v-2h-2Zm-14.194 0v-2h-2v2h2Zm0 8h-2v2h2v-2Zm14.194 0h2v-2h-2v2Zm0 10h-2v2h2v-2Zm7.556 0v2h2v-2h-2Zm0-10v-2h-2v2h2Zm14.25 0v2h2v-2h-2Zm0-8h2v-2h-2v2Zm-14.25 0h-2v2h2v-2Zm-7.556-8h7.556V0h-7.556v4Zm2 8V2h-4v10h4Zm-16.194 2h14.194v-4H-1.972v4Zm2 6v-8h-4v8h4Zm12.194-2H-1.972v4h14.194v-4Zm2 12V20h-4v10h4Zm5.556-2h-7.556v4h7.556v-4Zm-2-8v10h4V20h-4Zm16.25-2h-14.25v4h14.25v-4Zm-2-6v8h4v-8h-4Zm-12.25 2h14.25v-4h-14.25v4Zm-2-12v10h4V2h-4Z" mask="url(#b)"></path></g></svg>
+                  
+              <p>
+                English
+              </p>   
+                  </button>
+                  <button
+                    :class="{
+                  'bg-[#ecf3ff] text-blue-600': languageMenu.selected === 'မြန်မာ',
+                  'text-gray-700 ': languageMenu.selected !== 'မြန်မာ '
+                }"
+                    @click="languageMenu.selected = 'မြန်မာ'; languageMenu.open = false"
+                    class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex space-x-3 items-center "
+                    role="menuitem"
+                  >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" id="Mm-Myanmar--Streamline-Flagpack" height="24" width="24"><desc>MM Myanmar Streamline Icon: https://streamlinehq.com</desc><path fill="#e31d1c" fill-rule="evenodd" d="M0 15h24v6H0v-6Z" clip-rule="evenodd" stroke-width="0.75"></path><path fill="#5eaa22" fill-rule="evenodd" d="M0 9h24v6H0v-6Z" clip-rule="evenodd" stroke-width="0.75"></path><path fill="#ffd018" fill-rule="evenodd" d="M0 3h24v6H0V3Z" clip-rule="evenodd" stroke-width="0.75"></path><path fill="#f7fcff" fill-rule="evenodd" d="m12.046500000000002 14.982 -3.8625000000000003 2.4555 1.29525 -4.2997499999999995 -2.7555 -2.80875 3.79875 -0.0825 1.6807500000000002 -4.245 1.5314999999999999 4.3004999999999995 3.7897499999999997 0.066 -2.84775 2.8605 1.32975 4.0905 -3.96 -2.337Z" clip-rule="evenodd" stroke-width="0.75"></path></svg>
+                 <p>
+                  မြန်မာ
+                 </p>  
+
+
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- translate -->
+            <!-- noti button  -->
+            <button
+              class="hover:text-gray-900 relative flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700"
+            >
+              <!-- noti dot -->
+              <span
+                class="absolute flex right-0 top-0.5 z-1 h-2 w-2 rounded-full bg-orange-400"
+              >
+                <span
+                  class="absolute -z-1 inline-flex h-full w-full animate-ping rounded-full bg-orange-400 opacity-75"
+                ></span>
+              </span>
               <svg
-                class="fill-gray-500 group-hover:fill-gray-700"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
+                class="fill-current"
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
                   fill-rule="evenodd"
                   clip-rule="evenodd"
-                  d="M15.1007 19.247C14.6865 19.247 14.3507 18.9112 14.3507 18.497L14.3507 14.245H12.8507V18.497C12.8507 19.7396 13.8581 20.747 15.1007 20.747H18.5007C19.7434 20.747 20.7507 19.7396 20.7507 18.497L20.7507 5.49609C20.7507 4.25345 19.7433 3.24609 18.5007 3.24609H15.1007C13.8581 3.24609 12.8507 4.25345 12.8507 5.49609V9.74501L14.3507 9.74501V5.49609C14.3507 5.08188 14.6865 4.74609 15.1007 4.74609L18.5007 4.74609C18.9149 4.74609 19.2507 5.08188 19.2507 5.49609L19.2507 18.497C19.2507 18.9112 18.9149 19.247 18.5007 19.247H15.1007ZM3.25073 11.9984C3.25073 12.2144 3.34204 12.4091 3.48817 12.546L8.09483 17.1556C8.38763 17.4485 8.86251 17.4487 9.15549 17.1559C9.44848 16.8631 9.44863 16.3882 9.15583 16.0952L5.81116 12.7484L16.0007 12.7484C16.4149 12.7484 16.7507 12.4127 16.7507 11.9984C16.7507 11.5842 16.4149 11.2484 16.0007 11.2484L5.81528 11.2484L9.15585 7.90554C9.44864 7.61255 9.44847 7.13767 9.15547 6.84488C8.86248 6.55209 8.3876 6.55226 8.09481 6.84525L3.52309 11.4202C3.35673 11.5577 3.25073 11.7657 3.25073 11.9984Z"
+                  d="M10.75 2.29248C10.75 1.87827 10.4143 1.54248 10 1.54248C9.58583 1.54248 9.25004 1.87827 9.25004 2.29248V2.83613C6.08266 3.20733 3.62504 5.9004 3.62504 9.16748V14.4591H3.33337C2.91916 14.4591 2.58337 14.7949 2.58337 15.2091C2.58337 15.6234 2.91916 15.9591 3.33337 15.9591H4.37504H15.625H16.6667C17.0809 15.9591 17.4167 15.6234 17.4167 15.2091C17.4167 14.7949 17.0809 14.4591 16.6667 14.4591H16.375V9.16748C16.375 5.9004 13.9174 3.20733 10.75 2.83613V2.29248ZM14.875 14.4591V9.16748C14.875 6.47509 12.6924 4.29248 10 4.29248C7.30765 4.29248 5.12504 6.47509 5.12504 9.16748V14.4591H14.875ZM8.00004 17.7085C8.00004 18.1228 8.33583 18.4585 8.75004 18.4585H11.25C11.6643 18.4585 12 18.1228 12 17.7085C12 17.2943 11.6643 16.9585 11.25 16.9585H8.75004C8.33583 16.9585 8.00004 17.2943 8.00004 17.7085Z"
                   fill=""
                 ></path>
               </svg>
-
-              Sign out
             </button>
-          </div>
-        </div>
-      </div>
-    </div>
+            <!-- user profile  -->
 
-    <!--  @click="Swal.fire('Logged out!', 'You have been logged out.', 'success')" -->
-    <!-- table section -->
-    <section class="p-10">
-      <div class="rounded-2xl border border-gray-200 bg-white">
-        <div
-          class="px-5 py-4 sm:px-6 sm:py-5 flex justify-between items-center"
-        >
-          <h3 class="text-base font-medium text-gray-800">Dashboard</h3>
-
-          <button
-            id="btn"
-            class="rounded-lg py-2 px-3 text-gray-100 cursor-pointer bg-indigo-500 hover:bg-indigo-600 shadow-md flex items-center space-x-1"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-plus-icon lucide-plus"
+            <div
+              class="relative"
+              x-data="{ dropdownOpen: false }"
+              @click.outside="dropdownOpen = false"
             >
-              <path d="M5 12h14" />
-              <path d="M12 5v14" />
-            </svg>
-            <p>Create Ticket</p>
-          </button>
-        </div>
-        <div class="border-t border-gray-100 p-5 sm:p-6">
-          <!-- ====== Table Six Start -->
-          <div
-            class="overflow-hidden rounded-xl border border-gray-200 bg-white"
-          >
-            <div class="max-w-full overflow-x-auto custom-scrollbar">
-              <table class="w-full min-w-[1102px]">
-                <thead>
-                  <tr class="border-b border-gray-100">
-                    <th class="px-5 py-3 text-left sm:px-6">
-                      <p class="font-medium text-gray-500">Ticket ID</p>
-                    </th>
-                    <th class="px-5 py-3 text-left sm:px-6">
-                      <p class="font-medium text-gray-500">Title</p>
-                    </th>
-                    <th class="px-5 py-3 text-left sm:px-6">
-                      <p class="font-medium text-gray-500">Description</p>
-                    </th>
-                    <th class="px-5 py-3 text-left sm:px-6">
-                      <p class="font-medium text-gray-500">Status</p>
-                    </th>
-                    <th class="px-5 py-3 text-left sm:px-6">
-                      <p class="font-medium text-gray-500">Category</p>
-                    </th>
-                    <th class="px-5 py-3 text-left sm:px-6">
-                      <p class="font-medium text-gray-500">Created Date</p>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="border-b border-gray-100">
-                    <td class="px-5 py-4 sm:px-6">
-                      <h1 class="text-indigo-700 text-sm">TKT-20250502-0001</h1>
-                    </td>
-                    <td class="px-5 py-4 sm:px-6">
-                      <p class="text-gray-500">Login Issue</p>
-                    </td>
-                    <td class="px-5 py-4 sm:px-6">
-                      <p class="text-gray-500">User unable to log in</p>
-                    </td>
-                    <td class="px-5 py-4 sm:px-6">
-                      <p
-                        class="bg-blue-100 text-blue-700 text-sm inline-block rounded-full px-2 py-0.5 font-medium"
-                      >
-                        New
-                      </p>
-                    </td>
-                    <td class="px-5 py-4 sm:px-6">
-                      <p class="text-gray-500">Authentication</p>
-                    </td>
-                    <td class="px-5 py-4 sm:px-6">
-                      <p class="text-gray-500">02-05-2025 08:45:00</p>
-                    </td>
-                    <td class="px-5 py-4 sm:px-6">
-                      <button
-                        class="rounded-sm py-1.5 text-sm px-3 text-gray-100 cursor-pointer bg-blue-500 hover:bg-blue-600 shadow-md flex items-center space-x-1"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="lucide lucide-eye-icon lucide-eye"
-                        >
-                          <path
-                            d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
-                          />
-                          <circle cx="12" cy="12" r="3" />
-                        </svg>
-                        <p>View</p>
-                      </button>
-                    </td>
-                  </tr>
+              <button
+                class="flex items-center text-gray-700 focus:outline-none"
+                @click="dropdownOpen = !dropdownOpen"
+              >
+                <span
+                  class="mr-3 h-11 w-11 overflow-hidden relative rounded-full"
+                >
+                  <img
+                    src="imgs/profile.png"
+                    class="absolute top-1/2 transform -translate-y-1/2"
+                  />
+                </span>
+                <span class="mr-1 block font-medium text-sm">Musharof</span>
+                <svg
+                  class="stroke-gray-500"
+                  width="18"
+                  height="20"
+                  viewBox="0 0 18 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M4.3125 8.65625L9 13.3437L13.6875 8.65625"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></path>
+                </svg>
+              </button>
 
-                  <tr class="border-b border-gray-100">
-                    <td class="px-5 py-4 sm:px-6">
-                      <h1 class="text-indigo-700 text-sm">TKT-20250502-0002</h1>
-                    </td>
-                    <td class="px-5 py-4 sm:px-6">
-                      <p class="text-gray-500">Payment Delay</p>
-                    </td>
-                    <td class="px-5 py-4 sm:px-6">
-                      <p class="text-gray-500">
-                        Delay in transaction confirmation
-                      </p>
-                    </td>
-                    <td class="px-5 py-4 sm:px-6">
-                      <p
-                        class="bg-yellow-100 text-yellow-700 text-sm inline-block rounded-full px-2 py-0.5 font-medium"
+              <!-- dropdown start -->
+              <div
+                x-show="dropdownOpen"
+                x-transition
+                class="absolute right-0 mt-4 w-[260px] rounded-2xl border border-gray-200 bg-white p-3 shadow-lg z-50"
+              >
+                <div>
+                  <span class="block font-medium text-gray-700 text-sm"
+                    >Musharof Chowdhury</span
+                  >
+                  <span class="block text-xs text-gray-500 mt-0.5"
+                    >randomuser@pimjo.com</span
+                  >
+                </div>
+                <ul
+                  class="flex flex-col gap-1 border-b border-gray-200 pb-3 pt-4"
+                >
+                  <li>
+                    <a
+                      href="profile.html"
+                      class="group flex items-center gap-3 rounded-lg px-3 py-2 text-theme-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700"
+                    >
+                      <svg
+                        class="fill-gray-500 group-hover:fill-gray-700"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
                       >
-                        Open
-                      </p>
-                    </td>
-                    <td class="px-5 py-4 sm:px-6">
-                      <p class="text-gray-500">Billing</p>
-                    </td>
-                    <td class="px-5 py-4 sm:px-6">
-                      <p class="text-gray-500">02-05-2025 09:00:00</p>
-                    </td>
-                    <td class="px-5 py-4 sm:px-6">
-                      <button
-                        class="rounded-sm py-1.5 text-sm px-3 text-gray-100 cursor-pointer bg-blue-500 hover:bg-blue-600 shadow-md flex items-center space-x-1"
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M12 3.5C7.30558 3.5 3.5 7.30558 3.5 12C3.5 14.1526 4.3002 16.1184 5.61936 17.616C6.17279 15.3096 8.24852 13.5955 10.7246 13.5955H13.2746C15.7509 13.5955 17.8268 15.31 18.38 17.6167C19.6996 16.119 20.5 14.153 20.5 12C20.5 7.30558 16.6944 3.5 12 3.5ZM17.0246 18.8566V18.8455C17.0246 16.7744 15.3457 15.0955 13.2746 15.0955H10.7246C8.65354 15.0955 6.97461 16.7744 6.97461 18.8455V18.856C8.38223 19.8895 10.1198 20.5 12 20.5C13.8798 20.5 15.6171 19.8898 17.0246 18.8566ZM2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12ZM11.9991 7.25C10.8847 7.25 9.98126 8.15342 9.98126 9.26784C9.98126 10.3823 10.8847 11.2857 11.9991 11.2857C13.1135 11.2857 14.0169 10.3823 14.0169 9.26784C14.0169 8.15342 13.1135 7.25 11.9991 7.25ZM8.48126 9.26784C8.48126 7.32499 10.0563 5.75 11.9991 5.75C13.9419 5.75 15.5169 7.32499 15.5169 9.26784C15.5169 11.2107 13.9419 12.7857 11.9991 12.7857C10.0563 12.7857 8.48126 11.2107 8.48126 9.26784Z"
+                          fill=""
+                        ></path>
+                      </svg>
+                      Edit profile
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="chat.html"
+                      class="group flex items-center gap-3 rounded-lg px-3 py-2 text-theme-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700"
+                    >
+                      <svg
+                        class="fill-gray-500 group-hover:fill-gray-700"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="lucide lucide-eye-icon lucide-eye"
-                        >
-                          <path
-                            d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
-                          />
-                          <circle cx="12" cy="12" r="3" />
-                        </svg>
-                        <p>View</p>
-                      </button>
-                    </td>
-                  </tr>
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M10.4858 3.5L13.5182 3.5C13.9233 3.5 14.2518 3.82851 14.2518 4.23377C14.2518 5.9529 16.1129 7.02795 17.602 6.1682C17.9528 5.96567 18.4014 6.08586 18.6039 6.43667L20.1203 9.0631C20.3229 9.41407 20.2027 9.86286 19.8517 10.0655C18.3625 10.9253 18.3625 13.0747 19.8517 13.9345C20.2026 14.1372 20.3229 14.5859 20.1203 14.9369L18.6039 17.5634C18.4013 17.9142 17.9528 18.0344 17.602 17.8318C16.1129 16.9721 14.2518 18.0471 14.2518 19.7663C14.2518 20.1715 13.9233 20.5 13.5182 20.5H10.4858C10.0804 20.5 9.75182 20.1714 9.75182 19.766C9.75182 18.0461 7.88983 16.9717 6.40067 17.8314C6.04945 18.0342 5.60037 17.9139 5.39767 17.5628L3.88167 14.937C3.67903 14.586 3.79928 14.1372 4.15026 13.9346C5.63949 13.0748 5.63946 10.9253 4.15025 10.0655C3.79926 9.86282 3.67901 9.41401 3.88165 9.06303L5.39764 6.43725C5.60034 6.08617 6.04943 5.96581 6.40065 6.16858C7.88982 7.02836 9.75182 5.9539 9.75182 4.23399C9.75182 3.82862 10.0804 3.5 10.4858 3.5ZM13.5182 2L10.4858 2C9.25201 2 8.25182 3.00019 8.25182 4.23399C8.25182 4.79884 7.64013 5.15215 7.15065 4.86955C6.08213 4.25263 4.71559 4.61859 4.0986 5.68725L2.58261 8.31303C1.96575 9.38146 2.33183 10.7477 3.40025 11.3645C3.88948 11.647 3.88947 12.3531 3.40026 12.6355C2.33184 13.2524 1.96578 14.6186 2.58263 15.687L4.09863 18.3128C4.71562 19.3814 6.08215 19.7474 7.15067 19.1305C7.64015 18.8479 8.25182 19.2012 8.25182 19.766C8.25182 20.9998 9.25201 22 10.4858 22H13.5182C14.7519 22 15.7518 20.9998 15.7518 19.7663C15.7518 19.2015 16.3632 18.8487 16.852 19.1309C17.9202 19.7476 19.2862 19.3816 19.9029 18.3134L21.4193 15.6869C22.0361 14.6185 21.6701 13.2523 20.6017 12.6355C20.1125 12.3531 20.1125 11.647 20.6017 11.3645C21.6701 10.7477 22.0362 9.38152 21.4193 8.3131L19.903 5.68667C19.2862 4.61842 17.9202 4.25241 16.852 4.86917C16.3632 5.15138 15.7518 4.79856 15.7518 4.23377C15.7518 3.00024 14.7519 2 13.5182 2ZM9.6659 11.9999C9.6659 10.7103 10.7113 9.66493 12.0009 9.66493C13.2905 9.66493 14.3359 10.7103 14.3359 11.9999C14.3359 13.2895 13.2905 14.3349 12.0009 14.3349C10.7113 14.3349 9.6659 13.2895 9.6659 11.9999ZM12.0009 8.16493C9.88289 8.16493 8.1659 9.88191 8.1659 11.9999C8.1659 14.1179 9.88289 15.8349 12.0009 15.8349C14.1189 15.8349 15.8359 14.1179 15.8359 11.9999C15.8359 9.88191 14.1189 8.16493 12.0009 8.16493Z"
+                          fill=""
+                        ></path>
+                      </svg>
+                      Account settings
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="profile.html"
+                      class="group flex items-center gap-3 rounded-lg px-3 py-2 text-theme-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700"
+                    >
+                      <svg
+                        class="fill-gray-500 group-hover:fill-gray-700"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M3.5 12C3.5 7.30558 7.30558 3.5 12 3.5C16.6944 3.5 20.5 7.30558 20.5 12C20.5 16.6944 16.6944 20.5 12 20.5C7.30558 20.5 3.5 16.6944 3.5 12ZM12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM11.0991 7.52507C11.0991 8.02213 11.5021 8.42507 11.9991 8.42507H12.0001C12.4972 8.42507 12.9001 8.02213 12.9001 7.52507C12.9001 7.02802 12.4972 6.62507 12.0001 6.62507H11.9991C11.5021 6.62507 11.0991 7.02802 11.0991 7.52507ZM12.0001 17.3714C11.5859 17.3714 11.2501 17.0356 11.2501 16.6214V10.9449C11.2501 10.5307 11.5859 10.1949 12.0001 10.1949C12.4143 10.1949 12.7501 10.5307 12.7501 10.9449V16.6214C12.7501 17.0356 12.4143 17.3714 12.0001 17.3714Z"
+                          fill=""
+                        ></path>
+                      </svg>
+                      Support
+                    </a>
+                  </li>
+                </ul>
+                <button
+                  class="group mt-3 flex items-center gap-3 w-full justify-center rounded-lg px-3 py-2 text-theme-sm font-medium text-gray-700 hover:bg-red-100 hover:text-red-700"
+                >
+                  <svg
+                    class="fill-gray-500 group-hover:fill-gray-700"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M15.1007 19.247C14.6865 19.247 14.3507 18.9112 14.3507 18.497L14.3507 14.245H12.8507V18.497C12.8507 19.7396 13.8581 20.747 15.1007 20.747H18.5007C19.7434 20.747 20.7507 19.7396 20.7507 18.497L20.7507 5.49609C20.7507 4.25345 19.7433 3.24609 18.5007 3.24609H15.1007C13.8581 3.24609 12.8507 4.25345 12.8507 5.49609V9.74501L14.3507 9.74501V5.49609C14.3507 5.08188 14.6865 4.74609 15.1007 4.74609L18.5007 4.74609C18.9149 4.74609 19.2507 5.08188 19.2507 5.49609L19.2507 18.497C19.2507 18.9112 18.9149 19.247 18.5007 19.247H15.1007ZM3.25073 11.9984C3.25073 12.2144 3.34204 12.4091 3.48817 12.546L8.09483 17.1556C8.38763 17.4485 8.86251 17.4487 9.15549 17.1559C9.44848 16.8631 9.44863 16.3882 9.15583 16.0952L5.81116 12.7484L16.0007 12.7484C16.4149 12.7484 16.7507 12.4127 16.7507 11.9984C16.7507 11.5842 16.4149 11.2484 16.0007 11.2484L5.81528 11.2484L9.15585 7.90554C9.44864 7.61255 9.44847 7.13767 9.15547 6.84488C8.86248 6.55209 8.3876 6.55226 8.09481 6.84525L3.52309 11.4202C3.35673 11.5577 3.25073 11.7657 3.25073 11.9984Z"
+                      fill=""
+                    ></path>
+                  </svg>
 
-                  <tr class="border-b border-gray-100">
-                    <td class="px-5 py-4 sm:px-6">
-                      <h1 class="text-indigo-700 text-sm">TKT-20250502-0003</h1>
-                    </td>
-                    <td class="px-5 py-4 sm:px-6">
-                      <p class="text-gray-500">Bug Report</p>
-                    </td>
-                    <td class="px-5 py-4 sm:px-6">
-                      <p class="text-gray-500">Crash on profile page</p>
-                    </td>
-                    <td class="px-5 py-4 sm:px-6">
-                      <p
-                        class="bg-green-100 text-green-700 text-sm inline-block rounded-full px-2 py-0.5 font-medium"
-                      >
-                        Resolved
-                      </p>
-                    </td>
-                    <td class="px-5 py-4 sm:px-6">
-                      <p class="text-gray-500">Frontend</p>
-                    </td>
-                    <td class="px-5 py-4 sm:px-6">
-                      <p class="text-gray-500">02-05-2025 09:15:00</p>
-                    </td>
-                    <td class="px-5 py-4 sm:px-6">
-                      <button
-                        class="rounded-sm py-1.5 text-sm px-3 text-gray-100 cursor-pointer bg-blue-500 hover:bg-blue-600 shadow-md flex items-center space-x-1"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="lucide lucide-eye-icon lucide-eye"
-                        >
-                          <path
-                            d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
-                          />
-                          <circle cx="12" cy="12" r="3" />
-                        </svg>
-                        <p>View</p>
-                      </button>
-                    </td>
-                  </tr>
-
-                  <tr class="border-b border-gray-100">
-                    <td class="px-5 py-4 sm:px-6">
-                      <h1 class="text-indigo-700 text-sm">TKT-20250502-0004</h1>
-                    </td>
-                    <td class="px-5 py-4 sm:px-6">
-                      <p class="text-gray-500">API Timeout</p>
-                    </td>
-                    <td class="px-5 py-4 sm:px-6">
-                      <p class="text-gray-500">Slow response from data API</p>
-                    </td>
-                    <td class="px-5 py-4 sm:px-6">
-                      <p
-                        class="bg-orange-100 text-orange-700 text-sm inline-block rounded-full px-2 py-0.5 font-medium"
-                      >
-                        Pending
-                      </p>
-                    </td>
-                    <td class="px-5 py-4 sm:px-6">
-                      <p class="text-gray-500">Backend</p>
-                    </td>
-                    <td class="px-5 py-4 sm:px-6">
-                      <p class="text-gray-500">02-05-2025 10:10:00</p>
-                    </td>
-                    <td class="px-5 py-4 sm:px-6">
-                      <button
-                        class="rounded-sm py-1.5 text-sm px-3 text-gray-100 cursor-pointer bg-blue-500 hover:bg-blue-600 shadow-md flex items-center space-x-1"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="lucide lucide-eye-icon lucide-eye"
-                        >
-                          <path
-                            d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
-                          />
-                          <circle cx="12" cy="12" r="3" />
-                        </svg>
-                        <p>View</p>
-                      </button>
-                    </td>
-                  </tr>
-
-                  <tr class="border-b border-gray-100">
-                    <td class="px-5 py-4 sm:px-6">
-                      <h1 class="text-indigo-700 text-sm">TKT-20250502-0005</h1>
-                    </td>
-                    <td class="px-5 py-4 sm:px-6">
-                      <p class="text-gray-500">Deployment Failure</p>
-                    </td>
-                    <td class="px-5 py-4 sm:px-6">
-                      <p class="text-gray-500">Deployment pipeline error</p>
-                    </td>
-                    <td class="px-5 py-4 sm:px-6">
-                      <p
-                        class="bg-red-100 text-red-700 text-sm inline-block rounded-full px-2 py-0.5 font-medium"
-                      >
-                        Failed
-                      </p>
-                    </td>
-                    <td class="px-5 py-4 sm:px-6">
-                      <p class="text-gray-500">DevOps</p>
-                    </td>
-                    <td class="px-5 py-4 sm:px-6">
-                      <p class="text-gray-500">02-05-2025 11:05:00</p>
-                    </td>
-                    <td class="px-5 py-4 sm:px-6">
-                      <button
-                        class="rounded-sm py-1.5 text-sm px-3 text-gray-100 cursor-pointer bg-blue-500 hover:bg-blue-600 shadow-md flex items-center space-x-1"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="lucide lucide-eye-icon lucide-eye"
-                        >
-                          <path
-                            d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
-                          />
-                          <circle cx="12" cy="12" r="3" />
-                        </svg>
-                        <p>View</p>
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                  Sign out
+                </button>
+              </div>
             </div>
           </div>
-          <!-- ====== Table Six End -->
         </div>
       </div>
-    </section>
+      
+      <!-- table section -->
+      <section class="p-10 flex">
+        <!-- <div class="w-[300px] h-screen bg-green-300"></div> -->
 
-    <!-- form section  -->
+        <div class="rounded-2xl w-full border border-gray-200 bg-white">
+          <div
+            class="px-5 py-4 sm:px-6 sm:py-5 flex justify-between items-center"
+          >
+            <h3 class="text-base font-medium text-gray-800">Dashboard</h3>
+
+            <button
+              id="btn"
+              class="rounded-lg py-2 px-3 text-gray-100 cursor-pointer bg-indigo-500 hover:bg-indigo-600 shadow-md flex items-center space-x-1"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-plus-icon lucide-plus"
+              >
+                <path d="M5 12h14" />
+                <path d="M12 5v14" />
+              </svg>
+              <p>Create Ticket</p>
+            </button>
+          </div>
+          <div class="border-t border-gray-100 p-5 sm:p-6">
+            <!-- ====== Table Six Start -->
+            <div
+              class="overflow-hidden rounded-xl border border-gray-200 bg-white"
+            >
+              <div class="max-w-full overflow-x-auto custom-scrollbar">
+                <table class="w-full min-w-[1102px]">
+                  <thead>
+                    <tr class="border-b border-gray-100">
+                      <th class="px-5 py-3 text-left sm:px-6">
+                        <p class="font-medium text-gray-500">Ticket ID</p>
+                      </th>
+                      <th class="px-5 py-3 text-left sm:px-6">
+                        <p class="font-medium text-gray-500">Title</p>
+                      </th>
+                      <th class="px-5 py-3 text-left sm:px-6">
+                        <p class="font-medium text-gray-500">Description</p>
+                      </th>
+                      <th class="px-5 py-3 text-left sm:px-6">
+                        <p class="font-medium text-gray-500">Status</p>
+                      </th>
+                      <th class="px-5 py-3 text-left sm:px-6">
+                        <p class="font-medium text-gray-500">Category</p>
+                      </th>
+                      <th class="px-5 py-3 text-left sm:px-6">
+                        <p class="font-medium text-gray-500">Created Date</p>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="border-b border-gray-100">
+                      <td class="px-5 py-4 sm:px-6">
+                        <h1 class="text-indigo-700 text-sm">
+                          TKT-20250502-0001
+                        </h1>
+                      </td>
+                      <td class="px-5 py-4 sm:px-6">
+                        <p class="text-gray-500">Login Issue</p>
+                      </td>
+                      <td class="px-5 py-4 sm:px-6">
+                        <p class="text-gray-500">User unable to log in</p>
+                      </td>
+                      <td class="px-5 py-4 sm:px-6">
+                        <p
+                          class="bg-blue-100 text-blue-700 text-sm inline-block rounded-full px-2 py-0.5 font-medium"
+                        >
+                          New
+                        </p>
+                      </td>
+                      <td class="px-5 py-4 sm:px-6">
+                        <p class="text-gray-500">Authentication</p>
+                      </td>
+                      <td class="px-5 py-4 sm:px-6">
+                        <p class="text-gray-500">02-05-2025 08:45:00</p>
+                      </td>
+                      <td class="px-5 py-4 sm:px-6">
+                        <button
+                        @click = "viewTicket = true"
+                          class="rounded-sm py-1.5 text-sm px-3 text-gray-100 cursor-pointer bg-blue-500 hover:bg-blue-600 shadow-md flex items-center space-x-1"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="lucide lucide-eye-icon lucide-eye"
+                          >
+                            <path
+                              d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
+                            />
+                            <circle cx="12" cy="12" r="3" />
+                          </svg>
+                          <p>View</p>
+                        </button>
+                      </td>
+                    </tr>
+
+                    <tr class="border-b border-gray-100">
+                      <td class="px-5 py-4 sm:px-6">
+                        <h1 class="text-indigo-700 text-sm">
+                          TKT-20250502-0002
+                        </h1>
+                      </td>
+                      <td class="px-5 py-4 sm:px-6">
+                        <p class="text-gray-500">Payment Delay</p>
+                      </td>
+                      <td class="px-5 py-4 sm:px-6">
+                        <p class="text-gray-500">
+                          Delay in transaction confirmation
+                        </p>
+                      </td>
+                      <td class="px-5 py-4 sm:px-6">
+                        <p
+                          class="bg-yellow-100 text-yellow-700 text-sm inline-block rounded-full px-2 py-0.5 font-medium"
+                        >
+                          Open
+                        </p>
+                      </td>
+                      <td class="px-5 py-4 sm:px-6">
+                        <p class="text-gray-500">Billing</p>
+                      </td>
+                      <td class="px-5 py-4 sm:px-6">
+                        <p class="text-gray-500">02-05-2025 09:00:00</p>
+                      </td>
+                      <td class="px-5 py-4 sm:px-6">
+                        <button
+                          class="rounded-sm py-1.5 text-sm px-3 text-gray-100 cursor-pointer bg-blue-500 hover:bg-blue-600 shadow-md flex items-center space-x-1"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="lucide lucide-eye-icon lucide-eye"
+                          >
+                            <path
+                              d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
+                            />
+                            <circle cx="12" cy="12" r="3" />
+                          </svg>
+                          <p>View</p>
+                        </button>
+                      </td>
+                    </tr>
+
+                    <tr class="border-b border-gray-100">
+                      <td class="px-5 py-4 sm:px-6">
+                        <h1 class="text-indigo-700 text-sm">
+                          TKT-20250502-0003
+                        </h1>
+                      </td>
+                      <td class="px-5 py-4 sm:px-6">
+                        <p class="text-gray-500">Bug Report</p>
+                      </td>
+                      <td class="px-5 py-4 sm:px-6">
+                        <p class="text-gray-500">Crash on profile page</p>
+                      </td>
+                      <td class="px-5 py-4 sm:px-6">
+                        <p
+                          class="bg-green-100 text-green-700 text-sm inline-block rounded-full px-2 py-0.5 font-medium"
+                        >
+                          Resolved
+                        </p>
+                      </td>
+                      <td class="px-5 py-4 sm:px-6">
+                        <p class="text-gray-500">Frontend</p>
+                      </td>
+                      <td class="px-5 py-4 sm:px-6">
+                        <p class="text-gray-500">02-05-2025 09:15:00</p>
+                      </td>
+                      <td class="px-5 py-4 sm:px-6">
+                        <button
+                          class="rounded-sm py-1.5 text-sm px-3 text-gray-100 cursor-pointer bg-blue-500 hover:bg-blue-600 shadow-md flex items-center space-x-1"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="lucide lucide-eye-icon lucide-eye"
+                          >
+                            <path
+                              d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
+                            />
+                            <circle cx="12" cy="12" r="3" />
+                          </svg>
+                          <p>View</p>
+                        </button>
+                      </td>
+                    </tr>
+
+                    <tr class="border-b border-gray-100">
+                      <td class="px-5 py-4 sm:px-6">
+                        <h1 class="text-indigo-700 text-sm">
+                          TKT-20250502-0004
+                        </h1>
+                      </td>
+                      <td class="px-5 py-4 sm:px-6">
+                        <p class="text-gray-500">API Timeout</p>
+                      </td>
+                      <td class="px-5 py-4 sm:px-6">
+                        <p class="text-gray-500">Slow response from data API</p>
+                      </td>
+                      <td class="px-5 py-4 sm:px-6">
+                        <p
+                          class="bg-orange-100 text-orange-700 text-sm inline-block rounded-full px-2 py-0.5 font-medium"
+                        >
+                          Pending
+                        </p>
+                      </td>
+                      <td class="px-5 py-4 sm:px-6">
+                        <p class="text-gray-500">Backend</p>
+                      </td>
+                      <td class="px-5 py-4 sm:px-6">
+                        <p class="text-gray-500">02-05-2025 10:10:00</p>
+                      </td>
+                      <td class="px-5 py-4 sm:px-6">
+                        <button
+                          class="rounded-sm py-1.5 text-sm px-3 text-gray-100 cursor-pointer bg-blue-500 hover:bg-blue-600 shadow-md flex items-center space-x-1"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="lucide lucide-eye-icon lucide-eye"
+                          >
+                            <path
+                              d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
+                            />
+                            <circle cx="12" cy="12" r="3" />
+                          </svg>
+                          <p>View</p>
+                        </button>
+                      </td>
+                    </tr>
+
+                    <tr class="border-b border-gray-100">
+                      <td class="px-5 py-4 sm:px-6">
+                        <h1 class="text-indigo-700 text-sm">
+                          TKT-20250502-0005
+                        </h1>
+                      </td>
+                      <td class="px-5 py-4 sm:px-6">
+                        <p class="text-gray-500">Deployment Failure</p>
+                      </td>
+                      <td class="px-5 py-4 sm:px-6">
+                        <p class="text-gray-500">Deployment pipeline error</p>
+                      </td>
+                      <td class="px-5 py-4 sm:px-6">
+                        <p
+                          class="bg-red-100 text-red-700 text-sm inline-block rounded-full px-2 py-0.5 font-medium"
+                        >
+                          Failed
+                        </p>
+                      </td>
+                      <td class="px-5 py-4 sm:px-6">
+                        <p class="text-gray-500">DevOps</p>
+                      </td>
+                      <td class="px-5 py-4 sm:px-6">
+                        <p class="text-gray-500">02-05-2025 11:05:00</p>
+                      </td>
+                      <td class="px-5 py-4 sm:px-6">
+                        <button
+                          class="rounded-sm py-1.5 text-sm px-3 text-gray-100 cursor-pointer bg-blue-500 hover:bg-blue-600 shadow-md flex items-center space-x-1"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="lucide lucide-eye-icon lucide-eye"
+                          >
+                            <path
+                              d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
+                            />
+                            <circle cx="12" cy="12" r="3" />
+                          </svg>
+                          <p>View</p>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!-- ====== Table Six End -->
+          </div>
+        </div>
+      </section>
+
+
+      <div>
+    </section>
+    <!-- ticket create form section  -->
 
     <section
       id="ticketsForm"
-      class="hidden w-screen fixed top-0 left-0 flex justify-center min-h-screem overflow-auto h-screen items-center backdrop-blur-lg"
+      class="hidden w-screen z-50 fixed top-0 left-0 flex justify-center min-h-screem overflow-auto h-screen items-center backdrop-blur-lg"
     >
       <div
         id="toClose"
         class="w-full h-full fixed top-0 left-0 bg-black appear"
       ></div>
+      <!-- class="w-[90%] zoom-in md:w-[600px] h-fit flex flex-col rounded-2xl border-gray-200 border bg-white" -->
 
       <form
         action=""
-        class="w-[90%] zoom-in md:w-[600px] h-fit flex flex-col rounded-2xl border-gray-200 border bg-white"
-        onclick=""
+        class="w-[90%] zoom-in md:w-[600px] max-h-[80vh] overflow-y-auto custom-scrollbar h-fit flex flex-col rounded-2xl border-gray-200 border bg-white"
+
       >
         <div class="px-5 py-4 sm:px-6 sm:py-5">
           <div>
@@ -589,7 +909,7 @@
             <textarea
               placeholder="Enter your message"
               rows="6"
-              class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-blue-400 focus:outline-hidden focus:ring-1 focus:ring-blue-300/50"
+              class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-300/50"
             ></textarea>
           </div>
 
@@ -606,7 +926,7 @@
               class="relative z-20 bg-transparent"
             >
               <select
-                class="z-20 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-blue-400 focus:outline-hidden focus:ring-1 focus:ring-blue-300/50"
+                class="z-20 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-300/50"
                 :class="isOptionSelected &amp;&amp; 'text-gray-500 '"
                 @change="isOptionSelected = true"
               >
@@ -719,6 +1039,286 @@
       </form>
     </section>
 
+
+    <!-- View ticket form section  -->
+
+    <section
+
+
+:class = "viewTicket ? 'block' : 'hidden' "
+    class="w-screen z-50 fixed top-0 left-0 flex justify-center min-h-screem overflow-auto h-screen items-center backdrop-blur-lg"
+  >
+    <div
+     @click = "viewTicket = false"
+      class="w-full h-full fixed top-0 left-0 bg-black appear"
+    ></div>
+
+    <form
+      action=""
+      class="w-[90%] zoom-in md:w-[600px] max-h-[800px] overflow-y-auto custom-scrollbar h-fit flex flex-col rounded-2xl border-gray-200 border bg-white"
+      onclick=""
+    >
+      <div class="px-5 py-4 sm:px-6 sm:py-5 flex justify-between items-center  ">
+        <h1 class="text-indigo-600">ID : ERDFTGYHUJIKO</h1>
+        
+           <p
+                          class="bg-blue-100 text-blue-700 text-sm inline-block rounded-full px-2 py-0.5 font-medium"
+                        >
+                          New
+                        </p>
+
+      </div>
+      <section class="p-5 space-y-6 border-t border-gray-100 sm:p-6">
+        <!-- Title  -->
+        <div>
+          <label
+            class="mb-1.5 block text-sm font-medium text-gray-700"
+            for="title"
+          >
+            Title
+          </label>
+          <input
+            disabled
+            value="Login Issue"
+            type="text"
+            id="title"
+            name="title"
+            placeholder="Tickets title"
+            class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-300/50"
+          />
+        </div>
+
+        <!-- Description  -->
+
+        <div>
+          <label
+            class="mb-1.5 block text-sm font-medium text-gray-700"
+            for="description"
+          >
+            Description
+          </label>
+
+          <textarea
+            disabled
+            placeholder="Enter your message"
+            rows="6"
+            class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-300/50"
+          >
+User unable to log in</textarea
+          >
+        </div>
+
+        <!-- selected Box -->
+
+        <!-- Category  -->
+
+        <div>
+          <label
+            for="Category"
+            class="mb-1.5 block text-sm font-medium text-gray-700"
+          >
+            Category
+          </label>
+          <input
+            disabled
+            value="Backend"
+            type="text"
+            id="Category"
+            name="Category"
+            placeholder="Tickets title"
+            class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-300/50"
+          />
+        </div>
+
+        <!-- Attachment -->
+
+        <div
+          class="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-5 lg:p-10 w-full block hover:border-indigo-600 cursor-pointer text-center"
+          onclick="document.getElementById('fileInput').click()"
+        >
+          <!-- Hidden File Input -->
+          <input
+            type="file"
+            accept="image/png, image/jpeg, image/webp"
+            id="fileInput"
+            class="hidden"
+            onchange="handleFileChange(event)"
+          />
+
+          <div id="text">
+            <div class="mb-[22px] flex justify-center">
+              <div
+                class="flex h-[68px] w-[68px] items-center justify-center rounded-full bg-gray-200 text-gray-700"
+              >
+                <!-- Upload Icon -->
+                <svg
+                  class="fill-current"
+                  width="29"
+                  height="28"
+                  viewBox="0 0 29 28"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M14.5019 3.91699C14.2852 3.91699 14.0899 4.00891 13.953 4.15589L8.57363 9.53186C8.28065 9.82466 8.2805 10.2995 8.5733 10.5925C8.8661 10.8855 9.34097 10.8857 9.63396 10.5929L13.7519 6.47752V18.667C13.7519 19.0812 14.0877 19.417 14.5019 19.417C14.9161 19.417 15.2519 19.0812 15.2519 18.667V6.48234L19.3653 10.5929C19.6583 10.8857 20.1332 10.8855 20.426 10.5925C20.7188 10.2995 20.7186 9.82463 20.4256 9.53184L15.0838 4.19378C14.9463 4.02488 14.7367 3.91699 14.5019 3.91699ZM5.91626 18.667C5.91626 18.2528 5.58047 17.917 5.16626 17.917C4.75205 17.917 4.41626 18.2528 4.41626 18.667V21.8337C4.41626 23.0763 5.42362 24.0837 6.66626 24.0837H22.3339C23.5766 24.0837 24.5839 23.0763 24.5839 21.8337V18.667C24.5839 18.2528 24.2482 17.917 23.8339 17.917C23.4197 17.917 23.0839 18.2528 23.0839 18.667V21.8337C23.0839 22.2479 22.7482 22.5837 22.3339 22.5837H6.66626C6.25205 22.5837 5.91626 22.2479 5.91626 21.8337V18.667Z"
+                    fill=""
+                  ></path>
+                </svg>
+              </div>
+            </div>
+
+            <span
+              class="mx-auto mb-5 block w-full max-w-[290px] text-xs text-gray-700"
+            >
+              <!-- Drag and drop your PNG, JPG, WebP, SVG images here or browse -->
+              You can upload up to <strong>3 images</strong>. Each image must
+              be under <strong>1MB</strong>. Supported formats:
+              <strong>PNG, JPG, JPEG</strong>.
+            </span>
+
+            <span class="text-sm text-indigo-500 font-medium underline">
+              Browse File
+            </span>
+          </div>
+
+          <div
+            id="img"
+            class="hidden grid grid-cols-2 md:grid-cols-3 gap-3 w-full bg-gray-300 p-3 rounded-xl"
+          >
+            <!-- Images will be appended here -->
+          </div>
+        </div>
+
+        <!-- comment section for view  -->
+
+        <div x-data="{ showComment: true }">
+          <!-- Comment Section -->
+          <div>
+            <label
+              class="mb-1.5 block text-sm font-medium text-gray-700"
+              for="comment"
+            >
+              Your Comment
+            </label>
+            <textarea
+              id="comment"
+              name="comment"
+              placeholder="Type your comment here"
+              rows="4"
+              class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-300/50"
+            ></textarea>
+          </div>
+
+          <!-- Optional Character Count -->
+          <div class="flex justify-between mt-2 text-sm text-gray-500">
+            <span>Character limit: 500</span>
+            <span id="charCount">0 / 500</span>
+          </div>
+          <!-- Post Comment Button -->
+          <div class="mt-6 flex items-center justify-between">
+            <!-- Toggle Comments -->
+            <button
+              @click="showComment = !showComment"
+              type="button"
+              class="flex items-center space-x-2 group hover:text-indigo-600 text-gray-700"
+            >
+              <h2 class="text-md">Comments : 2</h2>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-4"
+                x-show="!showComment"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                />
+              </svg>
+
+              <svg
+                x-show="showComment"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-4"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88"
+                />
+              </svg>
+            </button>
+
+            <!-- Post Comment Button -->
+            <button
+              type="button"
+              class="h-[44px] px-4 py-2 text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600 transition rounded-lg shadow-md flex items-center"
+            >
+              Post Comment
+            </button>
+          </div>
+
+          <!-- Display Existing Comments -->
+          <div x-transition x-show="showComment" class="mt-4">
+            <div class="space-y-4 mt-2">
+              <!-- Sample Comment -->
+              <div class="border p-3 rounded-lg bg-gray-50">
+                <div class="flex justify-between items-center">
+                  <div class="text-gray-600 flex space-x-2">
+                    <span class="h-10 w-10 rounded-full bg-gray-300 block">
+                    </span>
+                    <span>
+                      <h class="text-sm leaading-1">John Doe</h>
+                      <p class="text-[10px]">johndoe@gmail.com</p>
+                    </span>
+                  </div>
+                  <span class="text-xs text-gray-500">1 hour ago</span>
+                </div>
+                <p class="mt-2 text-sm text-gray-800">
+                  This is an example of a comment displayed here.
+                </p>
+              </div>
+
+              <!-- Another Sample Comment -->
+              <div class="border p-3 rounded-lg bg-gray-50">
+                <div class="flex justify-between items-center">
+                  <div class="text-gray-600 flex space-x-2">
+                    <span class="h-10 w-10 rounded-full bg-gray-300 block">
+                    </span>
+                    <span>
+                      <h class="text-sm leaading-1">Johny Deep</h>
+                      <p class="text-[10px]">johndoe@gmail.com</p>
+                    </span>
+                  </div>
+                  <span class="text-xs text-gray-500">1 hour ago</span>
+                </div>
+                <p class="mt-2 text-sm text-gray-800">
+                  Another comment example goes here!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- button -->
+      </section>
+    </form>
+  </section>
+
+ 
     <script>
       const MAX_IMAGES = 3;
       const MAX_SIZE_MB = 1;
@@ -826,6 +1426,15 @@
       toClose.onclick = () => {
         ticketsForm.style.display = "none";
       };
+
+
+      const comment = document.getElementById("comment");
+    const charCount = document.getElementById("charCount");
+
+    comment.addEventListener("input", () => {
+      const len = comment.value.length;
+      charCount.textContent = `${len} / 500`;
+    });
     </script>
   </body>
 </html>

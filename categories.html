@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Categories</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- alpine.js -->
+    <script src="//unpkg.com/alpinejs" defer></script>
+
+    <style>
+      [x-cloak] {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body x-data="{addCategory : false }">
+    <section class="flex">
+      <!-- sidebar menu  -->
+      <div class="min-w-[300px] w-[300px] h-screen bg-blue-300"></div>
+
+      <!-- Main Context -->
+      <div x-data="{listStyle : 'Kanban' }" class="w-full bg-gray-100 h-screen">
+        <!-- Top Bar -->
+        <div class="bg-white h-[74px] border border-gray-300"></div>
+
+        <section class="p-10 flex">
+          <!-- <div class="w-[300px] h-screen bg-green-300"></div> -->
+
+          <div class="rounded-2xl w-full border border-gray-200 bg-white">
+            <div
+              class="px-5 py-4 sm:px-6 sm:py-5 flex justify-between items-center"
+            >
+              <button
+                @click="addCategory = true"
+                id="btn"
+                class="rounded py-2 text-sm px-3 text-gray-100 cursor-pointer bg-indigo-500 hover:bg-indigo-600 shadow-md flex items-center space-x-1"
+              >
+                <p>New</p>
+              </button>
+              <!-- search box -->
+
+              <div>
+                <form
+                  id="category-form"
+                  class="flex items-center justify-center sm:flex-row items-center gap-x-1"
+                >
+                  <div class="relative">
+                    <input
+                      type="text"
+                      id="category-input"
+                      placeholder=" Search by Name  "
+                      class="h-11 w-[450px] rounded-lg border border-gray-300 bg-transparent px-9 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                    />
+
+                    <i
+                      class="absolute top-1/2 transform -translate-y-1/2 left-3"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="size-5 text-gray-700"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+                        />
+                      </svg>
+                    </i>
+                  </div>
+
+                  <div
+                    x-cloak
+                    class="relative"
+                    x-data="{ open: false }"
+                    @click.away="open = false"
+                  >
+                    <button
+                      @click="open = !open"
+                      class="w-8 border border-gray-300 h-10 rounded-md hover:bg-gray-100 flex justify-center items-center"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="size-4 transform transition"
+                        :class="open ? 'rotate-180' : 'rotate-0' "
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                        />
+                      </svg>
+                    </button>
+
+                    <div
+                      x-show="open"
+                      class="absolute left-0 top-[calc(100%+5px)] text-xs bg-white border border-gray-300 rounded p-1 flex flex-col space-y-1"
+                    >
+                      <span
+                        class="flex justify-start items-center w-[80px] cursor-pointer px-3 py-1 hover:bg-gray-100"
+                      >
+                        <p>Name</p></span
+                      >
+                      <span
+                        class="flex justify-start items-center w-[80px] cursor-pointer px-3 py-1 hover:bg-gray-100"
+                      >
+                        <p>User</p></span
+                      >
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+              <!-- <h3 class="text-base font-medium text-gray-800">Dashboard</h3> -->
+              <div>
+                <div class="flex space-x-3">
+                  <button
+                    @click="listStyle = 'Kanban'"
+                    class="w-10 border border-gray-300 h-10 text-gray-700 rounded-md hover:bg-gray-100 flex justify-center items-center"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#000000"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      id="Kanban--Streamline-Lucide"
+                      height="24"
+                      width="24"
+                    >
+                      <desc>
+                        Kanban Streamline Icon: https://streamlinehq.com
+                      </desc>
+                      <path d="M6 5v11" stroke-width="2"></path>
+                      <path d="M12 5v6" stroke-width="2"></path>
+                      <path d="M18 5v14" stroke-width="2"></path>
+                    </svg>
+                  </button>
+
+                  <button
+                    @click="listStyle = 'table'"
+                    class="w-10 border border-gray-300 h-10 rounded-md hover:bg-gray-100 flex justify-center items-center"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#000000"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      id="Table-2--Streamline-Lucide"
+                      height="24"
+                      width="24"
+                    >
+                      <desc>
+                        Table 2 Streamline Icon: https://streamlinehq.com
+                      </desc>
+                      <path
+                        d="M9 3H5a2 2 0 0 0 -2 2v4m6 -6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2 -2V9M9 21H5a2 2 0 0 1 -2 -2V9m0 0h18"
+                        stroke-width="2"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="border-t border-gray-100 p-5 sm:p-6">
+              <!-- ====== Table Six Start -->
+              <div class="overflow-hidden bg-white">
+                <div class="max-w-full overflow-x-auto custom-scrollbar">
+                  <!-- Category List -->
+
+                  <!-- Kanban view  -->
+                  <div
+                    x-cloak
+                    x-show="listStyle === 'Kanban'"
+                    class="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 xl:grid-cols-4 gap-5"
+                  >
+                    <!-- first -->
+
+                    <div
+                      class="w-full bg-white p-5 border border-gray-300 rounded-md"
+                    >
+                      <span class="flex justify-between mb-10 items-center">
+                        <h1 class="text-2xl">Frontend</h1>
+
+                        <div
+                          class="relative"
+                          x-data="{ open: false }"
+                          @click.away="open = false"
+                        >
+                          <button
+                            @click="open = !open"
+                            class="w-8 h-8 rounded-full hover:bg-gray-100 flex justify-center items-center"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke-width="1.5"
+                              stroke="currentColor"
+                              class="size-6"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z"
+                              />
+                            </svg>
+                          </button>
+                          <!-- edit and delete -->
+                          <div
+                            x-show="open"
+                            class="absolute right-0 top-full text-xs bg-white border border-gray-300 rounded p-1 flex flex-col space-y-1"
+                          >
+                            <span
+                              class="flex justify-start items-center cursor-pointer select-none w-[80px] px-3 py-1 hover:bg-gray-100"
+                            >
+                              <p class="select-none">Edit</p></span
+                            >
+                            <span
+                              class="flex justify-start items-center cursor-pointer w-[80px] px-3 py-1 hover:bg-gray-100"
+                            >
+                              <p class="select-none">Delete</p></span
+                            >
+                          </div>
+                        </div>
+                      </span>
+
+                      <span class="flex justify-between text-xs">
+                        <p class="flex flex-col space-y-1">
+                          <strong>Create By</strong>
+                          <span> Phyo Maung Maung </span>
+                        </p>
+
+                        <p class="flex flex-col space-y-1">
+                          <strong> Date </strong>
+                          <span> 10/06/2025 10:25 </span>
+                        </p>
+                      </span>
+                    </div>
+
+                    <!-- second -->
+
+                    <div
+                      class="w-full bg-white p-5 border border-gray-300 rounded-md"
+                    >
+                      <span class="flex justify-between mb-10 items-center">
+                        <h1 class="text-2xl">Frontend</h1>
+
+                        <div
+                          class="relative"
+                          x-data="{ open: false }"
+                          @click.away="open = false"
+                        >
+                          <button
+                            @click="open = !open"
+                            class="w-8 h-8 rounded-full hover:bg-gray-100 flex justify-center items-center"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke-width="1.5"
+                              stroke="currentColor"
+                              class="size-6"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z"
+                              />
+                            </svg>
+                          </button>
+                          <!-- edit and delete -->
+                          <div
+                            x-show="open"
+                            class="absolute right-0 top-full text-xs bg-white border border-gray-300 rounded p-1 flex flex-col space-y-1"
+                          >
+                            <span
+                              class="flex justify-start items-center cursor-pointer select-none w-[80px] px-3 py-1 hover:bg-gray-100"
+                            >
+                              <p class="select-none">Edit</p></span
+                            >
+                            <span
+                              class="flex justify-start items-center cursor-pointer w-[80px] px-3 py-1 hover:bg-gray-100"
+                            >
+                              <p class="select-none">Delete</p></span
+                            >
+                          </div>
+                        </div>
+                      </span>
+
+                      <span class="flex justify-between text-xs">
+                        <p class="flex flex-col space-y-1">
+                          <strong>Create By</strong>
+                          <span> Phyo Maung Maung </span>
+                        </p>
+
+                        <p class="flex flex-col space-y-1">
+                          <strong> Date </strong>
+                          <span> 10/06/2025 10:25 </span>
+                        </p>
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- table view  -->
+
+                  <div
+                    x-cloak
+                    x-show="listStyle === 'table'"
+                    class="w-full overflow-x-hidden rounded-xl border border-gray-300"
+                  >
+                    <table class="w-full min-w-[1102px]">
+                      <thead scope="col">
+                        <tr class="border-b border-gray-100">
+                          <th scope="col" class="px-5 py-3 text-left sm:px-6">
+                            <p class="font-medium text-gray-500">Name</p>
+                          </th>
+                          <th scope="col" class="px-5 py-3 text-left sm:px-6">
+                            <p class="font-medium text-gray-500">Create By</p>
+                          </th>
+                          <th scope="col" class="px-5 py-3 text-left sm:px-6">
+                            <p class="font-medium text-gray-500">Date</p>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr class="border-b border-gray-100 hover:bg-gray-50">
+                          <td class="px-5 py-4 sm:px-6">
+                            <p class="text-gray-500 truncate">Frontend</p>
+                          </td>
+                          <td class="px-5 py-4 sm:px-6">
+                            <p class="text-gray-500 truncate">
+                              Phyo Maung Maung
+                            </p>
+                          </td>
+                          <td class="px-5 py-4 sm:px-6">
+                            <p class="text-gray-500">10/06/2025 10:25</p>
+                          </td>
+
+                          <td
+                            class="px-5 py-4 flex items-center space-x-3 sm:px-6"
+                          >
+                            <button
+                              title="Edit user"
+                              class="rounded-md py-1.5 text-sm px-3 text-gray-800 cursor-pointer border border-gray-300 hover:bg-gray-100 h-[34px] flex items-center space-x-1"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                class="size-4"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                                />
+                              </svg>
+
+                              <span>Edit</span>
+                            </button>
+
+                            <!-- delete btn -->
+                            <button
+                              title="Delete user"
+                              class="rounded-md py-1.5 text-sm px-3 text-gray-100 cursor-pointer bg-red-500 hover:bg-red-600 h-[34px] flex items-center space-x-1"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                class="size-4"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                                />
+                              </svg>
+
+                              <span>Delete</span>
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <!-- ====== Table Six End -->
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- create category form  -->
+    <section
+      x-cloak
+      :class="addCategory ? 'block' : 'hidden' "
+      class="w-screen z-50 fixed top-0 left-0 flex justify-center min-h-screem overflow-auto h-screen items-center backdrop-blur-lg"
+    >
+      <div
+        @click="addCategory = false"
+        class="w-full h-full fixed top-0 z-10 left-0 opacity-20 bg-black appear"
+      ></div>
+
+      <form
+        action=""
+        class="w-[90%] zoom-in md:w-[600px] z-20 bg-white max-h-[800px] overflow-y-auto custom-scrollbar h-fit flex flex-col rounded-2xl border-gray-200 border"
+        onclick=""
+      >
+        <!-- Add Category Form -->
+
+        <div class="p-5">
+          <h1 class="text-2xl text-gray-800 font-bold mb-3 mt-5">
+            Create New Category
+          </h1>
+          <p class="text-gray-500 text-sm font-semibold">
+            Effortlessly manage your ticket: add a new ticket
+          </p>
+        </div>
+
+        <section class="p-5 space-y-6 border-t border-gray-100 sm:p-6">
+          <!-- name  -->
+          <div>
+            <label
+              class="mb-1.5 block text-sm font-medium text-gray-700"
+              for="name"
+            >
+              Name
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Category Name "
+              class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-300/50"
+            />
+          </div>
+
+          <!-- button -->
+          <div class="mt-6 flex justify-end space-x-3 items-center">
+            <button
+              @click="addCategory = false"
+              type="button"
+              class="flex cursor-pointer items-center justify-center px-4 py-3 text-sm font-medium border-gray-300 transition rounded-lg border text-gray-800 hover:bg-gray-100 h-[44px]"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="flex cursor-pointer items-center justify-center px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-indigo-500 hover:bg-indigo-600 shadow-md h-[44px]"
+            >
+              Add Category
+            </button>
+          </div>
+        </section>
+      </form>
+    </section>
+    <script>
+      const form = document.getElementById("category-form");
+      const input = document.getElementById("category-input");
+      const list = document.getElementById("category-list");
+      const total = document.getElementById("total");
+
+      let categories = [];
+
+      function renderCategories() {
+        list.innerHTML = "";
+        categories.forEach((name, index) => {
+          const item = document.createElement("div");
+          item.className = "flex justify-between items-center";
+
+          item.innerHTML = `
+            <span class="text-gray-700 font-medium">${name}</span>
+            <button onclick="deleteCategory(${index})"
+              class="text-sm text-red-500 flex space-x-3 items-center px-4 py-2 border rounded-md hover:bg-gray-100 border-gray-300"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21
+                  c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25
+                  2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0
+                  1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0
+                  0-3.478-.397m-12 .562c.34-.059.68-.114
+                  1.022-.165m0 0a48.11 48.11 0 0 1
+                  3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964
+                  51.964 0 0 0-3.32 0c-1.18.037-2.09
+                  1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+              </svg>
+              <p>Delete</p>
+            </button>
+          `;
+          list.appendChild(item);
+        });
+        total.textContent = `Total Categories: ${categories.length}`;
+      }
+
+      function deleteCategory(index) {
+        categories.splice(index, 1);
+        renderCategories();
+      }
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const name = input.value.trim();
+        if (name && !categories.includes(name)) {
+          categories.push(name);
+          input.value = "";
+          renderCategories();
+        }
+      });
+
+      renderCategories(); // Initial render
+    </script>
+  </body>
+</html>

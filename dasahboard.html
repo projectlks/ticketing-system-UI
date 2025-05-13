@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Admin Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Outfit font -->
@@ -32,242 +32,277 @@
     </style>
   </head>
   <body>
-    <section class="w-full h-screen flex" x-data="{ openSidebar: false }">
+    <section
+      class="w-full relative h-screen flex"
+      x-data="{ openSidebar: true }"
+    >
       <!-- Sidebar -->
-      <aside
-        x-show="openSidebar"
-        x-transition
-        class="w-[300px] h-screen px-5 pt-5 bg-white shadow-md fixed inset-0 md:static z-50 md:block"
-      >
-        <!-- Logo -->
-        <div class="flex items-center space-x-3 mb-10">
-          <img src="imgs/logo.png" alt="logo" class="w-8 h-8" />
-          <h1 class="text-2xl font-bold text-gray-800">East Wind</h1>
-        </div>
 
-        <!-- Navigation -->
-        <nav class="space-y-2">
-          <div
-            class="group h-[40px] flex items-center space-x-3 text-blue-600 cursor-pointer py-2 px-3 rounded-lg bg-[#ecf3ff] transition-colors duration-200"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="size-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"
-              />
-            </svg>
-
-            <span class="text-sm font-medium">Dashboard</span>
+      <div x-show="openSidebar" x-transition>
+        <aside
+          @click.away="if (window.innerWidth < 768) openSidebar = false"
+          :class="openSidebar ? ' left-0 ' :  '-left-full' "
+          class="w-[300px] h-screen px-5 pt-5 transition shadow-md fixed bg-white inset-0 md:static z-50 md:block"
+        >
+          <!-- Logo -->
+          <div class="flex items-center space-x-3 mb-10">
+            <img src="imgs/logo.png" alt="logo" class="w-8 h-8" />
+            <h1 class="text-2xl font-bold text-gray-800">East Wind</h1>
           </div>
 
-          <!-- tickets -->
+          <!-- Navigation -->
+          <nav class="space-y-2" x-data="{activeItem : 'dashboard'} ">
+            <div class="w-full text-xs text-gray-600">Main</div>
 
-          <div
-            class="group h-[40px] flex items-center space-x-3 text-gray-700 hover:text-blue-600 cursor-pointer py-2 px-3 rounded-lg hover:bg-[#ecf3ff] transition-colors duration-200"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="size-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z"
-              />
-            </svg>
-
-            <span class="text-sm font-medium">Tickets</span>
-          </div>
-
-          <!-- analysti -->
-
-          <div
-            class="group h-[40px] flex items-center space-x-3 text-gray-700 hover:text-blue-600 cursor-pointer py-2 px-3 rounded-lg hover:bg-[#ecf3ff] transition-colors duration-200"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="size-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5m.75-9 3-3 2.148 2.148A12.061 12.061 0 0 1 16.5 7.605"
-              />
-            </svg>
-
-            <span class="text-sm font-medium">Analystic</span>
-          </div>
-
-          <!-- employee -->
-
-          <div
-            class="group h-[40px] flex items-center space-x-3 text-gray-700 hover:text-blue-600 cursor-pointer py-2 px-3 rounded-lg hover:bg-[#ecf3ff] transition-colors duration-200"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="size-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"
-              />
-            </svg>
-
-            <span class="text-sm font-medium">Employee</span>
-          </div>
-
-          <!-- Category -->
-
-          <div
-            class="group h-[40px] flex items-center space-x-3 text-gray-700 hover:text-blue-600 cursor-pointer py-2 px-3 rounded-lg hover:bg-[#ecf3ff] transition-colors duration-200"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-settings2-icon lucide-settings-2"
-            >
-              <path d="M20 7h-9" />
-              <path d="M14 17H5" />
-              <circle cx="17" cy="17" r="3" />
-              <circle cx="7" cy="7" r="3" />
-            </svg>
-            <span class="text-sm font-medium">Category</span>
-          </div>
-
-          <!-- Company -->
-
-          <div
-            class="group h-[40px] flex items-center space-x-3 text-gray-700 hover:text-blue-600 cursor-pointer py-2 px-3 rounded-lg hover:bg-[#ecf3ff] transition-colors duration-200"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="size-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21"
-              />
-            </svg>
-
-            <span class="text-sm font-medium">Company</span>
-          </div>
-
-          <!-- Tables with Dropdown -->
-          <div x-data="{ selected: '' }" class="space-y-1">
-            <!-- Header -->
+            <!-- dashboard -->
             <div
-              @click.prevent="selected = (selected === 'Tables' ? '' : 'Tables')"
-              class="group h-[40px] flex items-center justify-between text-gray-700 hover:text-blue-600 cursor-pointer py-2 px-3 rounded-lg hover:bg-[#ecf3ff] transition-colors duration-200"
-              :class="selected === 'Tables' || page === 'basicTables' || page === 'dataTables' ? 'bg-[#ecf3ff] text-blue-600' : ''"
+              @click="activeItem = 'dashboard'"
+              :class="{
+            'bg-[#ecf3ff] text-blue-600': activeItem === 'dashboard',
+            'text-gray-700 hover:text-blue-600': activeItem !== 'dashboard'
+          }"
+              class="group h-[40px] flex items-center space-x-3 cursor-pointer py-2 px-3 rounded-lg hover:bg-[#ecf3ff] transition-colors duration-200"
             >
-              <div class="flex items-center space-x-3">
-                <!-- Icon -->
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="size-6"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z"
-                  />
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                  />
-                </svg>
-                <span class="text-sm font-medium">Setting</span>
-              </div>
-
-              <!-- Arrow -->
               <svg
-                :class="selected === 'Tables' ? 'rotate-180 text-blue-600' : 'text-gray-500'"
-                class="size-4 transition-transform duration-200"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
-                viewBox="0 0 20 20"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
                 stroke="currentColor"
+                class="size-6"
               >
                 <path
-                  d="M6 8l4 4 4-4"
-                  stroke-width="1.5"
                   stroke-linecap="round"
                   stroke-linejoin="round"
+                  d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"
                 />
               </svg>
+
+              <span class="text-sm font-medium">Dashboard</span>
             </div>
 
-            <!-- Dropdown Menu -->
+            <!-- tickets -->
+
             <div
-              x-show="selected === 'Tables'"
-              x-transition
-              class="translate transform overflow-hidden block"
-              :class="(selected === 'Tables') ? 'block' :'hidden'"
+              @click="activeItem = 'tickets'"
+              :class="{
+              'bg-[#ecf3ff] text-blue-600': activeItem === 'tickets',
+              'text-gray-700 hover:text-blue-600': activeItem !== 'tickets'
+            }"
+              class="group h-[40px] flex items-center space-x-3 cursor-pointer py-2 px-3 rounded-lg hover:bg-[#ecf3ff] transition-colors duration-200"
             >
-              <ul class="mt-2 flex flex-col gap-1 pl-9">
-                <li class="">
-                  <a
-                    href="basic-tables.html"
-                    class="block text-sm py-2.5 px-3 rounded hover:text-blue-600 hover:bg-[#ecf3ff] transition"
-                    :class="page === 'basicTables' ? 'text-blue-600 font-medium bg-[#ecf3ff]' : 'text-gray-700'"
-                  >
-                    Basic Tables
-                  </a>
-                </li>
-
-                <li>
-                  <a
-                    href="data-tables.html"
-                    class="flex justify-between items-center text-sm py-2.5 px-3 rounded hover:text-blue-600 hover:bg-[#ecf3ff] transition"
-                    :class="page === 'dataTables' ? 'text-blue-600 font-medium bg-[#ecf3ff]' : 'text-gray-700'"
-                  >
-                    <span>Data Tables</span>
-                  </a>
-                </li>
-              </ul>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M6.429 9.75 2.25 12l4.179 2.25m0-4.5 5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0 4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0-5.571 3-5.571-3"
+                />
+              </svg>
+              <span class="text-sm font-medium">Tickets</span>
             </div>
-          </div>
-        </nav>
-      </aside>
 
+            <!-- Analytics -->
+            <div
+              @click="activeItem = 'Analytics'"
+              :class="{
+            'bg-[#ecf3ff] text-blue-600': activeItem === 'Analytics',
+            'text-gray-700 hover:text-blue-600': activeItem !== 'Analytics'
+          }"
+              class="group h-[40px] flex items-center space-x-3 cursor-pointer py-2 px-3 rounded-lg hover:bg-[#ecf3ff] transition-colors duration-200"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5m.75-9 3-3 2.148 2.148A12.061 12.061 0 0 1 16.5 7.605"
+                />
+              </svg>
+
+              <span class="text-sm font-medium">Analytics</span>
+            </div>
+            <div class="w-full text-xs text-gray-600">Management</div>
+            <!-- employee -->
+
+            <div
+              @click="activeItem = 'employee'"
+              :class="{
+            'bg-[#ecf3ff] text-blue-600': activeItem === 'employee',
+            'text-gray-700 hover:text-blue-600': activeItem !== 'employee'
+          }"
+              class="group h-[40px] flex items-center space-x-3 cursor-pointer py-2 px-3 rounded-lg hover:bg-[#ecf3ff] transition-colors duration-200"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"
+                />
+              </svg>
+
+              <span class="text-sm font-medium">Employee</span>
+            </div>
+
+            <!-- Category -->
+
+            <div
+              @click="activeItem = 'Category'"
+              :class="{
+              'bg-[#ecf3ff] text-blue-600': activeItem === 'Category',
+              'text-gray-700 hover:text-blue-600': activeItem !== 'Category'
+            }"
+              class="group h-[40px] flex items-center space-x-3 cursor-pointer py-2 px-3 rounded-lg hover:bg-[#ecf3ff] transition-colors duration-200"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
+                />
+              </svg>
+
+              <span class="text-sm font-medium">Category</span>
+            </div>
+
+            <!-- Company -->
+            <div
+              @click="activeItem = 'Company'"
+              :class="{
+            'bg-[#ecf3ff] text-blue-600': activeItem === 'Company',
+            'text-gray-700 hover:text-blue-600': activeItem !== 'Company'
+          }"
+              class="group h-[40px] flex items-center space-x-3 cursor-pointer py-2 px-3 rounded-lg hover:bg-[#ecf3ff] transition-colors duration-200"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21"
+                />
+              </svg>
+
+              <span class="text-sm font-medium">Company</span>
+            </div>
+            <div class="w-full text-xs text-gray-600">Setting</div>
+            <!-- Tables with Dropdown -->
+            <div x-data="{ selected: '' }" class="space-y-1">
+              <!-- Header -->
+
+              <div
+                @click="activeItem = 'settings'"
+                :class="{
+            'bg-[#ecf3ff] text-blue-600': activeItem === 'settings',
+            'text-gray-700 hover:text-blue-600': activeItem !== 'settings '
+          }"
+                class="group h-[40px] flex items-center space-x-3 justify-between cursor-pointer py-2 px-3 rounded-lg hover:bg-[#ecf3ff] transition-colors duration-200"
+                @click.prevent="selected = (selected === 'Tables' ? '' : 'Tables')"
+              >
+                <div class="flex items-center space-x-3">
+                  <!-- Icon -->
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                    />
+                  </svg>
+                  <span class="text-sm font-medium">Setting</span>
+                </div>
+
+                <!-- Arrow -->
+                <svg
+                  class="size-4 transition-transform duration-200"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 20 20"
+                  stroke="currentColor"
+                >
+                  <path
+                    d="M6 8l4 4 4-4"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+
+              <!-- Dropdown Menu -->
+              <div
+                x-show="selected === 'Tables'"
+                x-transition
+                class="translate transform overflow-hidden block"
+                :class="(selected === 'Tables') ? 'block' :'hidden'"
+              >
+                <ul class="mt-2 flex flex-col gap-1 pl-9">
+                  <li class="">
+                    <a
+                      href="#"
+                      class="block text-sm py-2.5 px-3 rounded hover:text-blue-600 hover:bg-[#ecf3ff] transition"
+                    >
+                      Basic Tables
+                    </a>
+                  </li>
+
+                  <li>
+                    <a
+                      href="#"
+                      class="flex justify-between items-center text-sm py-2.5 px-3 rounded hover:text-blue-600 hover:bg-[#ecf3ff] transition"
+                    >
+                      <span>Data Tables</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        </aside>
+      </div>
       <!-- Main Content -->
       <div class="flex-1 h-full transition bg-gray-100">
         <!-- <h2 class="text-gray-800 text-xl font-semibold">Main Content Area</h2> -->
@@ -295,36 +330,255 @@
                 ></path>
               </svg>
             </button>
-
+            <!-- right  -->
             <div class="flex space-x-3">
-              <!-- noti button  -->
-              <button
-                class="hover:text-gray-900 relative flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700"
+              <!-- translate button  -->
+
+              <div
+                class="relative inline-block text-left"
+                x-data="{ languageMenu: { open: false, selected: 'English' } }"
               >
-                <!-- noti dot -->
-                <span
-                  class="absolute flex right-0 top-0.5 z-1 h-2 w-2 rounded-full bg-orange-400"
+                <div class="h-full flex items-center">
+                  <button
+                    type="button"
+                    @click="languageMenu.open = !languageMenu.open"
+                    class="inline-flex justify-between gap-x-1.5 rounded-md w-[120px] bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50"
+                    id="language-button"
+                    aria-expanded="true"
+                    aria-haspopup="true"
+                  >
+                    <span x-text="languageMenu.selected"></span>
+                    <svg
+                      class="-mr-1 size-5 text-gray-400"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      aria-hidden="true"
+                      class="transform transition-transform"
+                      :class="languageMenu.open ? 'rotate-180' : 'rotate-0' "
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                </div>
+
+                <div
+                  x-transition
+                  x-show="languageMenu.open"
+                  @click.outside="languageMenu.open = false"
+                  class="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none"
+                  role="menu"
+                  aria-orientation="vertical"
+                  aria-labelledby="language-button"
+                  tabindex="-1"
                 >
+                  <!-- Active: "bg-gray-100 text-gray-900 outline-hidden", Not Active: "text-gray-700" -->
+                  <div class="p-1 flex flex-col space-y-1" role="none">
+                    <button
+                      :class="{
+                      'bg-[#ecf3ff] text-blue-600': languageMenu.selected === 'English',
+                      'text-gray-700 ': languageMenu.selected !== 'English '
+                    }"
+                      @click="languageMenu.selected = 'English'; languageMenu.open = false"
+                      class="block w-full mt-1 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+                      role="menuitem"
+                    >
+                      English
+                    </button>
+                    <button
+                      :class="{
+                      'bg-[#ecf3ff] text-blue-600': languageMenu.selected === 'Myanmar',
+                      'text-gray-700 ': languageMenu.selected !== 'Myanmar '
+                    }"
+                      @click="languageMenu.selected = 'Myanmar'; languageMenu.open = false"
+                      class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+                      role="menuitem"
+                    >
+                      မြန်မာ
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- translate -->
+              <!-- noti button  -->
+              <div
+                class="relative"
+                x-data="{ dropdownOpen: false, notifying: true }"
+                @click.outside="dropdownOpen = false"
+              >
+                <button
+                  @click.prevent="dropdownOpen = ! dropdownOpen; notifying = false"
+                  class="hover:text-gray-900 relative flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700"
+                >
+                  <!-- noti dot -->
                   <span
-                    class="absolute -z-1 inline-flex h-full w-full animate-ping rounded-full bg-orange-400 opacity-75"
-                  ></span>
-                </span>
-                <svg
-                  class="fill-current"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
+                    class="absolute flex right-0 top-0.5 z-1 h-2 w-2 rounded-full bg-orange-400"
+                  >
+                    <span
+                      class="absolute -z-1 inline-flex h-full w-full animate-ping rounded-full bg-orange-400 opacity-75"
+                    ></span>
+                  </span>
+                  <svg
+                    class="fill-current"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M10.75 2.29248C10.75 1.87827 10.4143 1.54248 10 1.54248C9.58583 1.54248 9.25004 1.87827 9.25004 2.29248V2.83613C6.08266 3.20733 3.62504 5.9004 3.62504 9.16748V14.4591H3.33337C2.91916 14.4591 2.58337 14.7949 2.58337 15.2091C2.58337 15.6234 2.91916 15.9591 3.33337 15.9591H4.37504H15.625H16.6667C17.0809 15.9591 17.4167 15.6234 17.4167 15.2091C17.4167 14.7949 17.0809 14.4591 16.6667 14.4591H16.375V9.16748C16.375 5.9004 13.9174 3.20733 10.75 2.83613V2.29248ZM14.875 14.4591V9.16748C14.875 6.47509 12.6924 4.29248 10 4.29248C7.30765 4.29248 5.12504 6.47509 5.12504 9.16748V14.4591H14.875ZM8.00004 17.7085C8.00004 18.1228 8.33583 18.4585 8.75004 18.4585H11.25C11.6643 18.4585 12 18.1228 12 17.7085C12 17.2943 11.6643 16.9585 11.25 16.9585H8.75004C8.33583 16.9585 8.00004 17.2943 8.00004 17.7085Z"
+                      fill=""
+                    ></path>
+                  </svg>
+                </button>
+
+                <!-- noti dropdown -->
+                <div
+                  x-show="dropdownOpen"
+                  class="absolute z-50 -right-[240px] mt-[17px] flex h-fit max-h-[480px] w-[350px] flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark sm:w-[361px] lg:right-0"
                 >
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M10.75 2.29248C10.75 1.87827 10.4143 1.54248 10 1.54248C9.58583 1.54248 9.25004 1.87827 9.25004 2.29248V2.83613C6.08266 3.20733 3.62504 5.9004 3.62504 9.16748V14.4591H3.33337C2.91916 14.4591 2.58337 14.7949 2.58337 15.2091C2.58337 15.6234 2.91916 15.9591 3.33337 15.9591H4.37504H15.625H16.6667C17.0809 15.9591 17.4167 15.6234 17.4167 15.2091C17.4167 14.7949 17.0809 14.4591 16.6667 14.4591H16.375V9.16748C16.375 5.9004 13.9174 3.20733 10.75 2.83613V2.29248ZM14.875 14.4591V9.16748C14.875 6.47509 12.6924 4.29248 10 4.29248C7.30765 4.29248 5.12504 6.47509 5.12504 9.16748V14.4591H14.875ZM8.00004 17.7085C8.00004 18.1228 8.33583 18.4585 8.75004 18.4585H11.25C11.6643 18.4585 12 18.1228 12 17.7085C12 17.2943 11.6643 16.9585 11.25 16.9585H8.75004C8.33583 16.9585 8.00004 17.2943 8.00004 17.7085Z"
-                    fill=""
-                  ></path>
-                </svg>
-              </button>
+                  <div
+                    class="mb-3 flex items-center justify-between border-b border-gray-100 pb-3 dark:border-gray-800"
+                  >
+                    <h5
+                      class="text-lg font-semibold text-gray-800 dark:text-white/90"
+                    >
+                      Notification
+                    </h5>
+
+                    <button
+                      @click="dropdownOpen = false"
+                      class="text-gray-500 dark:text-gray-400"
+                    >
+                      <svg
+                        class="fill-current"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M6.21967 7.28131C5.92678 6.98841 5.92678 6.51354 6.21967 6.22065C6.51256 5.92775 6.98744 5.92775 7.28033 6.22065L11.999 10.9393L16.7176 6.22078C17.0105 5.92789 17.4854 5.92788 17.7782 6.22078C18.0711 6.51367 18.0711 6.98855 17.7782 7.28144L13.0597 12L17.7782 16.7186C18.0711 17.0115 18.0711 17.4863 17.7782 17.7792C17.4854 18.0721 17.0105 18.0721 16.7176 17.7792L11.999 13.0607L7.28033 17.7794C6.98744 18.0722 6.51256 18.0722 6.21967 17.7794C5.92678 17.4865 5.92678 17.0116 6.21967 16.7187L10.9384 12L6.21967 7.28131Z"
+                          fill=""
+                        ></path>
+                      </svg>
+                    </button>
+                  </div>
+
+                  <ul
+                    class="custom-scrollbar flex h-auto flex-col overflow-y-auto"
+                  >
+                    <li>
+                      <a
+                        class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
+                        href="#"
+                      >
+                        <span
+                          class="relative z-1 block h-10 w-full overflow-hidden flex justify-center items-center max-w-10 rounded-full"
+                        >
+                          <img
+                            src="imgs/profile.png"
+                            alt="User"
+                            class="overflow-hidden rounded-full"
+                          />
+                          <span
+                            class="absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white bg-success-500 dark:border-gray-900"
+                          ></span>
+                        </span>
+
+                        <span class="block">
+                          <span
+                            class="mb-1.5 block text-theme-sm text-gray-500 dark:text-gray-400"
+                          >
+                            <span
+                              class="font-medium text-gray-800 dark:text-white/90"
+                              >Terry Franci</span
+                            >
+                            requests permission to change
+                            <span
+                              class="font-medium text-gray-800 dark:text-white/90"
+                              >Project - Nganter App</span
+                            >
+                          </span>
+
+                          <span
+                            class="flex items-center gap-2 text-theme-xs text-gray-500 dark:text-gray-400"
+                          >
+                            <span>Project</span>
+                            <span
+                              class="h-1 w-1 rounded-full bg-gray-400"
+                            ></span>
+                            <span>5 min ago</span>
+                          </span>
+                        </span>
+                      </a>
+                    </li>
+
+                    <li>
+                      <a
+                        class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
+                        href="#"
+                      >
+                        <span
+                          class="relative z-1 block h-10 w-full max-w-10 rounded-full"
+                        >
+                          <img
+                            src="src/images/user/user-03.jpg"
+                            alt="User"
+                            class="overflow-hidden rounded-full"
+                          />
+                          <span
+                            class="absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white bg-success-500 dark:border-gray-900"
+                          ></span>
+                        </span>
+
+                        <span class="block">
+                          <span
+                            class="mb-1.5 block text-theme-sm text-gray-500 dark:text-gray-400"
+                          >
+                            <span
+                              class="font-medium text-gray-800 dark:text-white/90"
+                              >Alena Franci</span
+                            >
+                            requests permission to change
+                            <span
+                              class="font-medium text-gray-800 dark:text-white/90"
+                              >Project - Nganter App</span
+                            >
+                          </span>
+
+                          <span
+                            class="flex items-center gap-2 text-theme-xs text-gray-500 dark:text-gray-400"
+                          >
+                            <span>Project</span>
+                            <span
+                              class="h-1 w-1 rounded-full bg-gray-400"
+                            ></span>
+                            <span>8 min ago</span>
+                          </span>
+                        </span>
+                      </a>
+                    </li>
+                  </ul>
+
+                  <a
+                    href="#"
+                    class="mt-3 flex justify-center rounded-lg border border-gray-300 bg-white p-3 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+                  >
+                    View All Notification
+                  </a>
+                </div>
+              </div>
               <!-- user profile  -->
 
               <div
@@ -332,25 +586,19 @@
                 x-data="{ dropdownOpen: false }"
                 @click.outside="dropdownOpen = false"
               >
-                <a
-                  class="flex items-center text-gray-700"
-                  href="#"
-                  @click.prevent="dropdownOpen = ! dropdownOpen"
+                <button
+                  class="flex items-center text-gray-700 focus:outline-none"
+                  @click="dropdownOpen = !dropdownOpen"
                 >
                   <span
                     class="mr-3 h-11 w-11 overflow-hidden relative rounded-full"
                   >
                     <img
                       src="imgs/profile.png"
-                      alt="User"
                       class="absolute top-1/2 transform -translate-y-1/2"
                     />
                   </span>
-
-                  <span class="mr-1 block text-theme-sm font-medium">
-                    Musharof
-                  </span>
-
+                  <span class="mr-1 block font-medium text-sm">Musharof</span>
                   <svg
                     class="stroke-gray-500"
                     width="18"
@@ -361,29 +609,28 @@
                   >
                     <path
                       d="M4.3125 8.65625L9 13.3437L13.6875 8.65625"
-                      stroke=""
+                      stroke="currentColor"
                       stroke-width="1.5"
                       stroke-linecap="round"
                       stroke-linejoin="round"
                     ></path>
                   </svg>
-                </a>
+                </button>
 
-                <!-- Dropdown Start -->
-
+                <!-- dropdown start -->
                 <div
                   x-show="dropdownOpen"
-                  class="hidden absolute right-0 mt-[17px] flex w-[260px] flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg"
+                  x-transition
+                  class="absolute right-0 mt-4 w-[260px] rounded-2xl border border-gray-200 bg-white p-3 shadow-lg z-50"
                 >
                   <div>
-                    <span class="block text-theme-sm font-medium text-gray-700">
-                      Musharof Chowdhury
-                    </span>
-                    <span class="mt-0.5 block text-xs text-gray-500">
-                      randomuser@pimjo.com
-                    </span>
+                    <span class="block font-medium text-gray-700 text-sm"
+                      >Musharof Chowdhury</span
+                    >
+                    <span class="block text-xs text-gray-500 mt-0.5"
+                      >randomuser@pimjo.com</span
+                    >
                   </div>
-
                   <ul
                     class="flex flex-col gap-1 border-b border-gray-200 pb-3 pt-4"
                   >
@@ -458,7 +705,7 @@
                     </li>
                   </ul>
                   <button
-                    class="group mt-3 flex items-center gap-3 rounded-lg px-3 py-2 text-theme-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700"
+                    class="group mt-3 flex items-center gap-3 w-full justify-center rounded-lg px-3 py-2 text-theme-sm font-medium text-gray-700 hover:bg-red-100 hover:text-red-700"
                   >
                     <svg
                       class="fill-gray-500 group-hover:fill-gray-700"
@@ -479,11 +726,11 @@
                     Sign out
                   </button>
                 </div>
-                <!-- Dropdown End -->
               </div>
             </div>
           </div>
         </div>
+
         <!-- Top Bar end -->
 
         <!-- main body start -->
