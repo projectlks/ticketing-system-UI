@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin layout</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Outfit font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+
+    <!-- apline.js -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+      defer
+    ></script>
+
+    <style>
+      * {
+        font-family: "Outfit", sans-serif;
+      }
+
+      [x-cloak] {
+        display: none !important;
+      }
+
+      @keyframes zoomIn {
+        0% {
+          transform: scale(0);
+          opacity: 0;
+        }
+        20% {
+          transform: scale(0.8);
+          opacity: 0.6;
+        }
+        40% {
+          transform: scale(1.1);
+          opacity: 0.9;
+        }
+        60% {
+          transform: scale(1.2);
+          opacity: 1;
+        }
+        80% {
+          transform: scale(1.1);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      @keyframes appear {
+        0% {
+          opacity: 0;
+        }
+
+        100% {
+          opacity: 0.3;
+        }
+      }
+
+      .zoom-in {
+        animation: zoomIn 0.2s ease-out forwards;
+      }
+      .appear {
+        animation: appear 0.4s ease-out forwards;
+      }
+    </style>
+  </head>
+  <body>
+    <section
+      class="w-full relative h-screen flex"
+      x-data="{ openSidebar: false, menuToggle : false }"
+    >
+      <!-- Sidebar -->
+      <aside class="w-[300px] bg-blue-300 h-screen"></aside>
+      <!-- Main Content -->
+      <div class="flex-1 h-screen overflow-hidden transition bg-gray-100">
+        <header class="w-full h-[74px] bg-red-500"></header>
+        <!-- main body start -->
+        <section class="p-4 md:p-6 xl:p-10 overflow-y-auto h-[calc(100%-74px)]">
+          <div class="bg-white w-full h-[500px] rounded-2xl p-6">
+            <!-- Add Here -->
+
+            <!-- delete h-[500px] and you can add what ever you need -->
+          </div>
+        </section>
+      </div>
+    </section>
+  </body>
+</html>
